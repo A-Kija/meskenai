@@ -156,9 +156,4 @@ console.log(isPink);
 
 
 
-
-
-
-
-
 console.log(animals, animals.length);
