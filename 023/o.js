@@ -41,6 +41,51 @@ racoon1.eat();
 class Circle {
 
     static circles = [];
+    static effectInterval;
+    static circlesPlace;
+    static buttonsPlace;
+
+    static init(circlesPlace, buttonsPlace, count = 5) {
+        this.circlesPlace = circlesPlace;
+        this.buttonsPlace = buttonsPlace;
+        for (let i = 0; i < count; i++) {
+            new this(circlesPlace);
+        }
+        this.createButton(buttonsPlace, 'Start changing colors', this.effectChangeColors.bind(this));
+        this.createButton(buttonsPlace, 'Move left', this.effectMoveLeft.bind(this));
+        this.createButton(buttonsPlace, 'Move right', this.effectMoveRight.bind(this));
+        this.createButton(buttonsPlace, 'Stop', _ => clearInterval(this.effectInterval));
+    }
+
+    static createButton(buttonsPlace, text, action) {
+        const button = document.createElement('button');
+        button.textContent = text;
+        button.addEventListener('click', action);
+        buttonsPlace.appendChild(button);
+    }
+
+    static effectChangeColors() {
+        clearInterval(this.effectInterval);
+        this.effectInterval = setInterval(_ => {
+            this.circles.forEach(circle => circle.changeColor());
+        }, 300);
+    }
+
+    static effectMoveLeft() {
+        clearInterval(this.effectInterval);
+        this.effectInterval = setInterval(_ => {
+            this.circles.push(this.circles.shift());
+            this.circles.forEach(circle => this.circlesPlace.appendChild(circle.circleDiv));
+        }, 700);
+    }
+
+    static effectMoveRight() {
+        clearInterval(this.effectInterval);
+        this.effectInterval = setInterval(_ => {
+            this.circles.unshift(this.circles.pop());
+            this.circles.forEach(circle => this.circlesPlace.appendChild(circle.circleDiv));
+        }, 700);
+    }
 
     constructor(place) {
         this.circleDiv = document.createElement('div');
@@ -65,15 +110,31 @@ class Circle {
 
 }
 
-const place = document.querySelector('#circles');
-// 5 circles
-for (let i = 0; i < 5; i++) {
-    new Circle(place);
+const circlesPlace = document.querySelector('#circles');
+const buttonsPlace = document.querySelector('#buttons');
+
+
+
+
+class Colors4 extends Circle {
+    
+        static colors = ['crimson', 'darkblue', 'darkgreen', 'darkorange'];
+
+        constructor(place) {
+            super(place); // call parent constructor
+            this.circleDiv.textContent = 'bla';
+        }
+    
+        randomColor() {
+            const randomIndex = Math.floor(Math.random() * this.constructor.colors.length);
+            return this.constructor.colors[randomIndex];
+        }
 }
 
-setInterval(() => {
-    Circle.circles.forEach(circle => circle.changeColor());
-}, 1000);
+
+Colors4.init(circlesPlace, buttonsPlace, 6);
+
+
 
 
 
