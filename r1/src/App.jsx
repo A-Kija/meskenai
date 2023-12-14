@@ -1,6 +1,7 @@
-import './App.css';
+import './App.scss';
+import Animal from './Components/026/Animal';
 
-import Sq from './Components/026/Sq';
+// import Sq from './Components/026/Sq';
 
 
 function App() {
@@ -20,6 +21,29 @@ function App() {
 
     const colors2 = ['crimson', 'darkorange', 'skyblue', 'skyblue', 'limegreen', 'darkorchid', 'gold', 'tomato', 'dodgerblue', 'mediumseagreen', 'rebeccapurple', 'darkkhaki', 'steelblue', 'mediumvioletred', 'darkslateblue', 'darkcyan', 'darkslategray', 'darkturquoise', 'cornflowerblue', 'darkgoldenrod', 'darkolivegreen', 'darkmagenta', 'darkred', 'darkgreen', 'darkblue', 'darkviolet', 'darkgray', 'darkslategrey'];
 
+    const farm = [
+        'Big Cow',
+        'Small Cow',
+        'Big Pig',
+        'Small Pig',
+        'Angry Chicken',
+        'Happy Chicken',
+        'Big Sheep',
+        'Bad Sheep',
+        'Big Goat',
+        'White Goat',
+        'Black Goat',
+        'Tiny Goat',
+        'Techno Chicken',
+        'Big Dog',
+        'Big Horse',
+        'Small Horse',
+        'Big Duck',
+        'Small Duck',
+        'Big Turkey',
+        'Very Big Turkey',
+        'Small Turkey'
+    ];
 
     return (
         <div className="App">
@@ -30,11 +54,17 @@ function App() {
                         colors2.map((color, i) => <li key={i} style={{color}}>{color}</li>)
                     }
                 </ul> */}
-                <div className="sq-bin">
+                {/* <div className="sq-bin">
                     {
                         colors2.map((color, i) => <Sq key={i} color={color}/>)
                     }
-                </div>
+                </div> */}
+
+                <div className="squares">
+                    {
+                        farm.map((animal, i) => <Animal key={i} betKas={animal}/>)
+                    }
+                </div>  
             </header>
         </div>
     );
