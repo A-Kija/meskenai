@@ -52,5 +52,36 @@
     &__animal {
       letter-spacing: 2px;
     }
+    &.spin {
+      animation: spin 10s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  } 
+}
+
+.dogs {
+  display: flex;
+  gap: 10px;
+  margin: 30px;
+  .dog {
+    width: 100px;
+    height: 100px;
+    border: 1px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+  }
+  .circle {
+    border-radius: 50%;
+  }
+  .square {
+    border: 1px solid gray;
   }
 }

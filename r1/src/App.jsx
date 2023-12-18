@@ -1,73 +1,70 @@
 import './App.scss';
-import Animal from './Components/026/Animal';
+import './buttons.scss';
+import { useState } from 'react';
 
-// import Sq from './Components/026/Sq';
+export default function App() {
+
+    // random hex color generator
+    const randomColor = _ => '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'); 
 
 
-function App() {
+    const [counter, setCounter] = useState(0);
+    const [squares, setSquares] = useState([]);
 
-    // const randomColor = _ => '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-    // const colors = [
-    //     <li>red</li>,
-    //     <li>green</li>,
-    //     <li>blue</li>,
-    //     <li>yellow</li>,
-    //     <li>orange</li>,
-    //     <li>purple</li>,
-    //     <li>pink</li>,
-    //     <li>brown</li>,
-    //     <li>black</li>
-    // ];
+    const plus = _ => {
+        setCounter(c => c + 1);
+        console.log('plus', counter);
+    }
 
-    const colors2 = ['crimson', 'darkorange', 'skyblue', 'skyblue', 'limegreen', 'darkorchid', 'gold', 'tomato', 'dodgerblue', 'mediumseagreen', 'rebeccapurple', 'darkkhaki', 'steelblue', 'mediumvioletred', 'darkslateblue', 'darkcyan', 'darkslategray', 'darkturquoise', 'cornflowerblue', 'darkgoldenrod', 'darkolivegreen', 'darkmagenta', 'darkred', 'darkgreen', 'darkblue', 'darkviolet', 'darkgray', 'darkslategrey'];
+    const reset = _ => {
+        setCounter(0);
+        console.log('reset', counter);
+    }
 
-    const farm = [
-        'Big Cow',
-        'Small Cow',
-        'Big Pig',
-        'Small Pig',
-        'Angry Chicken',
-        'Happy Chicken',
-        'Big Sheep',
-        'Bad Sheep',
-        'Big Goat',
-        'White Goat',
-        'Black Goat',
-        'Tiny Goat',
-        'Techno Chicken',
-        'Big Dog',
-        'Big Horse',
-        'Small Horse',
-        'Big Duck',
-        'Small Duck',
-        'Big Turkey',
-        'Very Big Turkey',
-        'Small Turkey'
-    ];
+    const addSquare = _ => {
+        // squares.push(5); // BAD
+        setSquares(s => [...s, randomColor()]); // GOOD
+    }
+
+    const resetSquares = _ => {
+        setSquares([]);
+    }
+
 
     return (
         <div className="App">
             <header className="App-header">
-                <h1>LISTS</h1>
-                {/* <ul>
-                    {
-                        colors2.map((color, i) => <li key={i} style={{color}}>{color}</li>)
-                    }
-                </ul> */}
-                {/* <div className="sq-bin">
-                    {
-                        colors2.map((color, i) => <Sq key={i} color={color}/>)
-                    }
-                </div> */}
+                <h1>This is STATE</h1>
+
+                <h2>{counter}</h2>
+
+                <div className="buttons">
+                <button className="black" onClick={plus}>+</button>
+                <button className="red" onClick={reset}>0</button>
+                </div>
+
+                {/* 
+                <button className="black" onClick={plus}>black</button>
+                <button className="red" onClick={reset}>red</button>
+                <button className="yellow" onClick={reset}>yellow</button>
+                <button className="green" onClick={reset}>green</button>
+                <button className="white" onClick={reset}>white</button> */}
 
                 <div className="squares">
                     {
-                        farm.map((animal, i) => <Animal key={i} betKas={animal}/>)
+                        squares.map((square, i) => <div className="square spin" style={{
+                            backgroundColor: square + '66',
+                            border: '1px solid ' + square
+                        }} key={i}>{square}</div>)
                     }
-                </div>  
+                </div>
+                <div className="buttons">
+                <button className="yellow" onClick={addSquare}>ADD SQUARE</button>
+                <button className="red" onClick={resetSquares}>RESET</button>
+                </div>
+
+
             </header>
         </div>
     );
 }
-
-export default App;
