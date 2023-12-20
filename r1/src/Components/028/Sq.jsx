@@ -15,7 +15,7 @@ export default function Sq({square, setSquares}) {
     }
 
     return (
-        <div className="square pulse pointer" style={{
+        <div className="square spin pointer" style={{
             backgroundColor: square.color + '66',
             border: '1px solid ' + square.color,
         }}

@@ -1,74 +1,51 @@
 import './App.scss';
-import './buttons.scss';
-import { useEffect, useState } from 'react';
-import Sq from './Components/028/Sq';
+import ColorCircle from './Components/029/ColorCircle';
 import randomColor from './Functions/randomColor';
-import { v4 as uuidv4 } from 'uuid';
-import BigSq1 from './Components/028/BigSq1';
-import BigSq2 from './Components/028/BigSq2';
-
+import './buttons.scss';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function App() {
 
-    const [squares, setSquares] = useState([]);
+    const [counterYellow, setCounterYellow] = useState(0);
+    const [counterRed, setCounterRed] = useState(0);
+    const [circleColor, setCircleColor] = useState('#777777');
 
-    const [sq2, setSq2] = useState('#444444');
-    const [sq1, setSq1] = useState('#444444');
+    // const changeColor = _ => {
+    //     setCircleColor(randomColor());
+    // }
 
-    const [sync, setSync] = useState(false);
+    const changeColor = useCallback(_ => {
+        setCircleColor(randomColor());
+    }, [setCircleColor]);
+
+
+    const countYelow = _ => {
+        setCounterYellow(c => c + 1);
+        // changeColor();
+    }
+
+    const countRed = _ => {
+        setCounterRed(c => c + 1);
+        // changeColor();
+    }
 
     useEffect(_ => {
-        console.log('Squres are changed');
-        if (sync) {
-            setSquares(s => s.map(s => ({ ...s, show: true })));
-            setSync(false);
-        }
-    }, [squares]);
-
-
-    const add = _ => {
-        setSquares(s => [...s,
-        {
-            color: randomColor(),
-            id: uuidv4(),
-            show: true
-        }
-        ]);
-    }
-
-    const reset = _ => {
-        setSquares(s => s.map(s => ({ ...s, show: false })));
-    }
-
-    const syncSpin = _ => {
-        setSquares(s => s.map(s => ({ ...s, show: false })));
-        setSync(true);
-    }
-
+        console.log('useEffect');
+        changeColor();
+    }, [changeColor, counterYellow, counterRed]);
 
 
     return (
         <div className="App">
             <header className="App-header">
-                <h1>This is STATE part II</h1>
-                <div className="squares">
-                    {
-                        squares.map((s, i) => s.show ? <Sq setSquares={setSquares} square={s} key={i} /> : null)
-                    }
-                </div>
+                <h1>This is STATE and UseEfect</h1>
+
+                <ColorCircle color={circleColor} />
+                
                 <div className="buttons">
-                    <button className="black" onClick={add}>+</button>
-                    <button className="red" onClick={reset}>0</button>
-                    <button className="green" onClick={_ => setSquares(s => s.map(s => ({ ...s, show: true })))}>*</button>
-                    <button className="yellow" onClick={syncSpin}>sync</button>
+                    <button className="yellow" onClick={countYelow}><h2>{counterYellow}</h2></button>
+                    <button className="red" onClick={countRed}><h2>{counterRed}</h2></button>
                 </div>
-                <div className="squares">
-                    <BigSq1 sq1={sq1} setSq1={setSq2} />
-                    <BigSq2 sq2={sq2} setSq2={setSq1} />
-
-                </div>
-
-
 
             </header>
         </div>
