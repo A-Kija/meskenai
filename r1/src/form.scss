@@ -7,7 +7,7 @@
     gap: 10px;
     margin: 20px;
 
-    input[type="text"] {
+    input[type="text"], select {
         width: 100%;
         padding: 12px 20px;
         margin: 8px 0;
@@ -20,6 +20,47 @@
         &:focus {
             outline: none;
             border: 2px solid crimson;
+        }
+    }
+
+    select {
+        background-color: #282c34;
+        color: white;
+        font-size: 20px;
+    }
+
+    .checkboxes {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 10px;
+        margin: 20px;
+        label {
+            color: white;
+            font-size: 30px;
+            padding: 0 30px;
+            user-select: none;
+            cursor: pointer;
+            position: relative;
+            &:before {
+                content: '\2610';
+                display: inline-block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                color: white;
+            }
+        }
+        input {
+            display: none;
+            &:checked + label {
+                &:before {
+                    content: '\2611';
+                }
+            }
         }
     }
 
