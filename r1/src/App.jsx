@@ -1,7 +1,7 @@
 import './App.scss';
 import './buttons.scss';
 import './form.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const animals = ['cat', 'dog', 'fish', 'bird', 'rabbit', 'hamster', 'turtle', 'snake', 'lizard', 'frog', 'chicken', 'duck', 'goat', 'horse', 'cow', 'pig', 'sheep', 'mouse', 'rat', 'guinea pig', 'chinchilla', 'ferret', 'hedgehog', 'gerbil', 'chicken', 'duck', 'goat', 'horse', 'cow', 'pig', 'sheep', 'mouse', 'rat', 'guinea pig', 'chinchilla', 'ferret', 'hedgehog', 'gerbil'];
 
@@ -20,6 +20,27 @@ export default function App() {
         C: false,
         D: false
     });
+    const [radios, setRadios] = useState({
+        A: false,
+        B: true,
+        C: false,
+        D: false
+    });
+
+    const [textarea, setTextarea] = useState('');
+
+    const [range, setRange] = useState(50);
+
+    const [rangeSetter, setRangeSetter] = useState(50);
+
+    const [color, setColor] = useState('#282c34');
+
+    const [backgroundColor, setBackgroundColor] = useState('#282c34');
+
+    useEffect(_ => {
+   
+        setBackgroundColor(color + parseInt(range).toString(16));
+    }, [color, range]);
 
 
     const handleSingleText = e => {
@@ -39,11 +60,38 @@ export default function App() {
         setCheckboxes(prev => ({ ...prev, [e.target.name]: !prev[e.target.name] }));
     }
 
+    const handleRadio = e => {
+        for (let key in radios) {
+            if (key === e.target.name) {
+                setRadios(prev => ({ ...prev, [key]: !prev[key] }));
+            } else {
+                setRadios(prev => ({ ...prev, [key]: false }));
+            }
+        }
+    }
+
+    const handleTextarea = e => {
+        setTextarea(e.target.value);
+    }
+
+    const handleRange = e => {
+        setRange(e.target.value);
+    }
+
+    const handleRageSetter = e => {
+        const value = e.target.value ? e.target.value : 0;
+        setRangeSetter(e.target.value);
+        setRange(value);
+    }
+
+    const handleColor = e => {
+        setColor(e.target.value);
+    }
+
 
     return (
         <div className="App">
-            <header className="App-header">
-                <h1>Form Control</h1>
+            <header className="App-header" style={{backgroundColor}}>
                 <div className="form">
                     <input type="text" placeholder="Name" value={singleText} onChange={handleSingleText} />
 
@@ -69,7 +117,24 @@ export default function App() {
                         <label htmlFor="D">D</label>
                     </div>
 
+                    <div className="radios">
+                        <input type="checkbox" id="Ar" name="A" checked={radios.A} onChange={handleRadio} />
+                        <label htmlFor="Ar">A</label>
+                        <input type="checkbox" id="Br" name="B" checked={radios.B} onChange={handleRadio}/>
+                        <label htmlFor="Br">B</label>
+                        <input type="checkbox" id="Cr" name="C" checked={radios.C} onChange={handleRadio}/>
+                        <label htmlFor="Cr">C</label>
+                        <input type="checkbox" id="Dr" name="D" checked={radios.D} onChange={handleRadio}/>
+                        <label htmlFor="Dr">D</label>
+                    </div>
 
+                    <textarea placeholder="Message" value={textarea} onChange={handleTextarea}></textarea>
+
+                    <h3>{range}</h3>
+                    <input type="range" min="0" max="255" step="1" value={range} onChange={handleRange} />
+                    <input type="number" min="0" max="255" value={rangeSetter} onChange={handleRageSetter} />
+
+                    <input type="color" value={color} onChange={handleColor} />
                 </div>
 
             </header>
