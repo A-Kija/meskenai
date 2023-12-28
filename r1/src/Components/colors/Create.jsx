@@ -1,9 +1,15 @@
 import { useState } from 'react';
 
-export default function Create() {
+export default function Create({ setCreateData }) {
 
     const [color, setColor] = useState('#000000');
     const [size, setSize] = useState(100);
+
+    const handleSubmit = _ => {
+        setCreateData({ color, size });
+        setColor('#000000');
+        setSize(100);
+    }
 
     return (
         <div className="card">
@@ -17,10 +23,10 @@ export default function Create() {
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Square size: {size} px</label>
-                    <input type="range" className="form-range" min="100" max="300" value={size} onChange={e => setSize(e.target.value)}  />
+                    <input type="range" className="form-range" min="100" max="300" value={size} onChange={e => setSize(e.target.value)} />
                 </div>
                 <div className="mb-3">
-                    <button className="green">Add new color</button>
+                    <button className="green" onClick={handleSubmit}>Add new color</button>
                 </div>
             </div>
         </div>
