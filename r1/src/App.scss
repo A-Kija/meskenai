@@ -119,3 +119,17 @@ h3, h4, h5, h6 {
   height: 300px;
   border-radius: 50%;
 }
+
+.modal {
+  display: block;
+  background-color: #282c3477;
+}
+.showLine {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  .buttons {
+    justify-content: flex-end;
+  }
+}

@@ -15,6 +15,7 @@ export function lsStore(key, data) {
     const oldData = get(key);
     const dataToStore = [...oldData, newData];
     set(key, dataToStore);
+    return id;
 }
 
 export function lsUpdate(key, id, data) {
@@ -23,7 +24,7 @@ export function lsUpdate(key, id, data) {
     set(key, dataToStore);
 }
 
-export function lsDelete(key, id) {
+export function lsDestroy(key, id) {
     const oldData = get(key);
     const dataToStore = oldData.filter(item => item.id !== id);
     set(key, dataToStore);
