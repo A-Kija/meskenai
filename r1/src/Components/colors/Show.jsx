@@ -1,4 +1,4 @@
-export function Show({ color, setDeleteData }) {
+export function Show({ color, setDeleteData, setEditData }) {
     return (
         <div className="showLine">
             <div style={{
@@ -8,7 +8,7 @@ export function Show({ color, setDeleteData }) {
             }}></div>
             <div className="buttons">
                 <button className="red" onClick={_ => setDeleteData(color)}>Delete</button>
-                <button className="green">Edit</button>
+                <button className="green" onClick={_ => setEditData(color)}>Edit</button>
             </div>
         </div>
     );
