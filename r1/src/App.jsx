@@ -2,22 +2,33 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import './buttons.scss';
 import './form.scss';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Create from './Components/colors/Create';
 import { lsDestroy, lsRead, lsStore, lsUpdate } from './Components/colors/lsManager';
 import Read from './Components/colors/Read';
 import Delete from './Components/colors/Delete';
 import Edit from './Components/colors/Edit';
+import Messages from './Components/colors/Messages';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function App() {
 
     const KEY = 'colors';
-    const [colors, setColors] = useState([]);
+    const [colors, setColors] = useState([]); // readData
     const [createData, setCreateData] = useState(null);
     const [deleteData, setDeleteData] = useState(null);
     const [destroyData, setDestroyData] = useState(null);
     const [editData, setEditData] = useState(null);
     const [updateData, setUpdateData] = useState(null);
+    const [messages, setMessages] = useState([]);
+
+    const addMessage = useCallback((type, text) => {
+        const id = uuidv4();
+        setMessages(prevMessages => [{ id, type, text }, ...prevMessages]);
+        setTimeout(_ => {
+            setMessages(prevMessages => prevMessages.filter(m => m.id !== id));
+        }, 3000);
+    }, []);
 
     useEffect(_ => {
         setColors(lsRead(KEY));
@@ -28,39 +39,33 @@ export default function App() {
         if (null === createData) {
             return;
         }
-
         const id = lsStore(KEY, createData);
-
         setColors(prevColors => [...prevColors, { ...createData, id }]);
-
-    }, [createData]);
+        addMessage('dark', 'Color created successfully');
+    }, [createData, setColors, addMessage]);
 
     useEffect(_ => {
         if (null === destroyData) {
             return;
         }
-
         lsDestroy(KEY, destroyData.id);
-
         setColors(prevColors => prevColors.filter(color => color.id !== destroyData.id));
-
         setDeleteData(null);
-
-    }, [destroyData]);
+        addMessage('danger', 'Color deleted successfully');
+    }, [destroyData, setColors, addMessage]);
 
 
     useEffect(_ => {
         if (null === updateData) {
             return;
         }
-
         lsUpdate(KEY, updateData.id, updateData);
-
         setColors(prevColors => prevColors.map(color => color.id === updateData.id ? { ...updateData, id: updateData.id } : color));
-
         setEditData(null);
-        
-    }, [updateData]);
+        addMessage('dark', 'Color updated successfully');
+    }, [updateData, setColors, addMessage]);
+
+
 
 
 
@@ -79,6 +84,7 @@ export default function App() {
             </div>
             <Delete deleteData={deleteData} setDeleteData={setDeleteData} setDestroyData={setDestroyData} />
             <Edit editData={editData} setEditData={setEditData} setUpdateData={setUpdateData} />
+            <Messages messages={messages} />
         </>
     );
 }
