@@ -10,6 +10,7 @@ import Delete from './Components/colors/Delete';
 import Edit from './Components/colors/Edit';
 import Messages from './Components/colors/Messages';
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 
 export default function App() {
 
@@ -34,7 +35,6 @@ export default function App() {
         setColors(lsRead(KEY));
     }, []);
 
-
     useEffect(_ => {
         if (null === createData) {
             return;
@@ -42,6 +42,19 @@ export default function App() {
         const id = lsStore(KEY, createData);
         setColors(prevColors => [...prevColors, { ...createData, id }]);
         addMessage('dark', 'Color created successfully');
+        // get name for color
+        // remove # from hex
+        const color = createData.color.replace('#', '');
+        axios.get(`https://www.thecolorapi.com/id?hex=${color}`)
+            .then(res => {
+                const name = res.data.name.value;
+                const newData = { ...createData, id, name };
+                lsUpdate(KEY, id, newData);
+                setColors(prevColors => prevColors.map(color => color.id === id ? newData : color));
+                addMessage('dark', 'Color name updated from API');
+            })
+            .catch(_ => console.log('error'));
+
     }, [createData, setColors, addMessage]);
 
     useEffect(_ => {
@@ -54,21 +67,26 @@ export default function App() {
         addMessage('danger', 'Color deleted successfully');
     }, [destroyData, setColors, addMessage]);
 
-
     useEffect(_ => {
         if (null === updateData) {
             return;
         }
-        lsUpdate(KEY, updateData.id, updateData);
-        setColors(prevColors => prevColors.map(color => color.id === updateData.id ? { ...updateData, id: updateData.id } : color));
+        const id = updateData.id;
+        lsUpdate(KEY, id, updateData);
+        setColors(prevColors => prevColors.map(color => color.id === id ? { ...updateData, id } : color));
         setEditData(null);
         addMessage('dark', 'Color updated successfully');
+        const color = updateData.color.replace('#', '');
+        axios.get(`https://www.thecolorapi.com/id?hex=${color}`)
+            .then(res => {
+                const name = res.data.name.value;
+                const newData = { ...updateData, id, name };
+                lsUpdate(KEY, id, newData);
+                setColors(prevColors => prevColors.map(color => color.id === id ? newData : color));
+                addMessage('dark', 'Color name updated from API');
+            })
+            .catch(_ => console.log('error'));
     }, [updateData, setColors, addMessage]);
-
-
-
-
-
 
     return (
         <>

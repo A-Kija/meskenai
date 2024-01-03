@@ -10,6 +10,7 @@ export default function Create({ setCreateData }) {
             { 
                 color,
                 size: +size, // +size converts string to number
+                name: 'New color'
             });
         setColor('#000000');
         setSize(100);
