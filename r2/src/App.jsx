@@ -48,27 +48,27 @@ function App() {
 
   useEffect(_ => {
     setAnimalEditInput(animals?.find(animal => animal.id === editStatus)?.name || '');
-  }, [editStatus]);
+  }, [editStatus, setAnimalEditInput, animals]);
 
 
   useEffect(_ => {
     if (null !== storeAnimals) {
       axios.post(URL, storeAnimals)
         .then(res => {
-          setAnimals([{ name: storeAnimals.name, id: res.data.id }, ...animals]);
+          setAnimals(a => [{ name: storeAnimals.name, id: res.data.id }, ...a]);
           setAnimalInput('');
           setError(null);
           addMessage(res.data.type, res.data.message);
         })
         .catch(err => console.log(err));
     }
-  }, [storeAnimals]);
+  }, [storeAnimals, addMessage]);
 
   useEffect(_ => {
     if (null !== destroyAnimals) {
       axios.delete(`${URL}/${destroyAnimals.id}`)
         .then(res => {
-          setAnimals(animals.filter(animal => animal.id !== destroyAnimals.id));
+          setAnimals(a => a.filter(animal => animal.id !== destroyAnimals.id));
           setError(null);
           addMessage(res.data.type, res.data.message);
         })
@@ -77,20 +77,20 @@ function App() {
           addMessage('danger', err.response ? err.response.status + ' ' + err.response.statusText : err.message);
         });
     }
-  }, [destroyAnimals]);
+  }, [destroyAnimals, addMessage]);
 
   useEffect(_ => {
     if (null !== updateAnimals) {
       axios.put(`${URL}/${updateAnimals.id}`, updateAnimals)
         .then(res => {
-          setAnimals(animals.map(animal => animal.id === updateAnimals.id ? { ...animal, name: updateAnimals.name } : animal));
+          setAnimals(a => a.map(animal => animal.id === updateAnimals.id ? { ...animal, name: updateAnimals.name } : animal));
           setEditStatus(null);
           setError(null);
           addMessage(res.data.type, res.data.message);
         })
         .catch(err => console.log(err));
     }
-  }, [updateAnimals]);
+  }, [updateAnimals, addMessage]);
 
   const submit = _ => {
     setStoreAnimals({ name: animalInput });
