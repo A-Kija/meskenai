@@ -1,0 +1,67 @@
+$cw: 1280px;
+
+section {
+    width: 100%;
+    display: flex;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    max-width: $cw;
+}
+
+.books {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0 1em;
+    box-sizing: border-box;
+    .book {
+        width: 100%;
+        max-width: 300px;
+        margin-bottom: 1em;
+        box-sizing: border-box;
+        &__image {
+            width: 100%;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        &__title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 0.5em 0;
+        }
+        &__author {
+            font-size: 0.8em;
+            color: #999;
+            margin: 0.5em 0;
+        }
+        &__price {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 0.5em 0;
+        }
+        &__description {
+            font-size: 0.8em;
+            color: #999;
+            margin: 0.5em 0;
+        }
+        &__button {
+            width: 100%;
+            padding: 0.5em 1em;
+            border: 1px solid #999;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #999;
+            cursor: pointer;
+            &:hover {
+                background-color: #999;
+                color: #fff;
+            }
+        }
+    }
+}

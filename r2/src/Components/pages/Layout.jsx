@@ -4,7 +4,11 @@ import Home from './Home';
 import Contact from './Contact';
 import Loading from './Loading';
 import Page404 from './Page404';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext } from 'react';
+
+export const ParameterContext = createContext();
+
+// Layout komponenta reiktu pakeisti i ParameterContext.Provider komponenta
 
 export default function Layout() {
 
@@ -43,10 +47,15 @@ export default function Layout() {
 
 
     return (
-        <>
+        <ParameterContext.Provider value={
+            {
+                params,
+                path
+            }
+        }>
             {
                 routes.find(route => route.path === path)?.component || <Page404 />
             }
-        </>
+        </ParameterContext.Provider>
     );
 }
