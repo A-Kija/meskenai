@@ -18,9 +18,22 @@ app.use(bodyParser.json());
 connection.connect();
 
 
+// SELECT column1, column2, ...
+// FROM table_name;
+app.get('/trees', (req, res) => {
 
-app.get('/', (req, res) => {
-    res.send('Hello My dear, MariaDB!');
+    const sql = `
+        SELECT id, name, height, type
+        FROM trees
+        -- WHERE type = 'lapuotis' OR height > 10
+        -- ORDER BY type ASC, height DESC
+        -- LIMIT 4, 4
+    `;
+
+    connection.query(sql, (err, rows) => {
+        if (err) throw err;
+        res.json(rows);
+    });
 });
 
 

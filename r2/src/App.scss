@@ -119,3 +119,11 @@ main {
     }
   }
 }
+
+.forms {
+  display: flex;
+  flex-direction: row;
+  .form {
+    width: 33%;
+  }
+}
