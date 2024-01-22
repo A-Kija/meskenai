@@ -16,10 +16,16 @@ export default function App() {
 
     const types = ['lapuotis', 'spygliuotis', 'palmė'];
     const [inputs, setInputs] = useState({ name: '', height: '', type: '' });
+    const [cutId, setCutId] = useState('');
+    const [growInputs, setGrowInputs] = useState({ id: '', height: '' });
 
 
     const handleInputChange = e => {
         setInputs({ ...inputs, [e.target.id]: e.target.value });
+    }
+
+    const handleGrowInputChange = e => {
+        setGrowInputs({ ...growInputs, [e.target.id]: e.target.value });
     }
 
 
@@ -29,6 +35,31 @@ export default function App() {
         axios.get(API_URL)
             .then(res => setTrees(res.data))
     }, []);
+
+
+    const plant = _ => {
+        axios.post(API_URL, {...inputs, height: +inputs.height})
+            .then(res => {
+                setTrees([...trees, { ...inputs, id: res.data.id }]);
+                setInputs({ name: '', height: '', type: '' });
+            });
+    }
+
+    const cut = _ => {
+        axios.delete(`${API_URL}/${cutId}`)
+            .then(_ => {
+                setTrees(trees.filter(tree => tree.id !== +cutId));
+                setCutId('');
+            });
+    }
+
+    const grow = _ => {
+        axios.put(`${API_URL}/${growInputs.id}`, { height: +growInputs.height })
+            .then(_ => {
+                setTrees(trees.map(tree => tree.id === +growInputs.id ? { ...tree, height: +growInputs.height } : tree));
+                setGrowInputs({ id: '', height: '' });
+            });
+    }
 
 
     return (
@@ -69,7 +100,25 @@ export default function App() {
                                 types.map(type => <option key={type} value={type}>{type}</option>)
                             }
                         </select>
-                        <button className="green">Plant Tree</button>
+                        <button type="button" className="green" onClick={plant}>Plant Tree</button>
+                    </form>
+                </div>
+                <div className="form">
+                    <h2>Plant a Tree</h2>
+                    <form>
+                        <label htmlFor="id">ID</label>
+                        <input type="text" id="id" placeholder="ID" value={cutId} onChange={e => setCutId(e.target.value)} />
+                        <button type="button" className="green" onClick={cut}>Cut Tree</button>
+                    </form>
+                </div>
+                <div className="form">
+                    <h2>Grow a Tree</h2>
+                    <form>
+                        <label htmlFor="id">ID</label>
+                        <input type="text" id="id" placeholder="ID" value={growInputs.id} onChange={handleGrowInputChange} />
+                        <label htmlFor="height">Height</label>
+                        <input type="text" id="height" placeholder="Aukštis" value={growInputs.height} onChange={handleGrowInputChange} />
+                        <button type="button" className="green" onClick={grow}>Grow Tree</button>
                     </form>
                 </div>
             </div>
