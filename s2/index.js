@@ -140,10 +140,26 @@ app.get('/clients', (req, res) => {
         FROM clients AS c
         INNER JOIN phones AS p
         ON c.id = p.client_id
+        ORDER BY c.name ASC
     `;
+  } else if (type === 'left') {
+    sql = `
+        SELECT c.id, p.id AS pid, name, number, client_id
+        FROM clients AS c
+        LEFT JOIN phones AS p
+        ON c.id = p.client_id
+    `;
+  } else if (type === 'right') {
+    sql = `
+        SELECT c.id, p.id AS pid, name, number, client_id
+        FROM clients AS c
+        RIGHT JOIN phones AS p
+        ON c.id = p.client_id
+    `;
+  } else {
+    // error
+
   }
-
-
 
   connection.query(sql, (err, rows) => {
     if (err) throw err;
