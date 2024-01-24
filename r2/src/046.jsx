@@ -6,6 +6,7 @@ import counterReducer from './Components/046/counterReducer';
 
 export default function App() {
 
+    const [counter1, setCounter1] = useState(0);
     const [input1, setInput1] = useState(0);
 
     const [counter2, dispatchCounter2] = useReducer(counterReducer, 0);
@@ -37,8 +38,12 @@ export default function App() {
     return (
         <div className="App">
             <header className="App-header">
+                <h1>USE STATE: {counter1}</h1>
                 <h1>USE REDUCER: {counter2}</h1>
                 <div className="buttons">
+                    <button className="yellow" onClick={_ => setCounter1(c => c + 1)}>+</button>
+                    <button className="yellow" onClick={_ => setCounter1(c => c - 1)}>-</button>
+                    <button className="yellow" onClick={_ => setCounter1(0)}>0</button>
                     <button className="green" onClick={plus}>+</button>
                     <button className="green" onClick={minus}>-</button>
                     <button className="green" onClick={reset}>0</button>
