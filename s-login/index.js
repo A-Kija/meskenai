@@ -8,11 +8,10 @@ const connection = mysql.createConnection({
   password: '',
   database: 'forest2'
 })
-
-app.use(cors());
 const app = express();
 const port = 3001;
 
+app.use(cors());
 app.use(cors());
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -31,5 +30,5 @@ app.get('/', (req, res) => {
 
 
 app.listen(port, () => {
-  console.log(`FOREST SERVERIS klauso ${port} porto.`);
+  console.log(`FRUITŲ SERVERIS klauso ${port} porto.`);
 });
