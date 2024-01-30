@@ -27,6 +27,17 @@ app.get('/', (req, res) => {
   res.send('Labas Bebrai!');
 });
 
+const doAuth = (req, res, next) => {
+
+  const token = req.query.token || req.body.token || '';
+
+  console.log('token', token);
+
+return next();
+};
+
+app.use(doAuth);
+
 
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
