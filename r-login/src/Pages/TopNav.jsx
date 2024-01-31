@@ -11,6 +11,7 @@ export default function TopNav() {
             <div className="menu">
                 <a href="#home">Home</a>
                 <a href="#fruits">Fruits</a>
+                <a href="#fruits/create">Add fruit</a>
             </div>
             <div className="login">
                 {
