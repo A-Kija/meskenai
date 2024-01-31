@@ -1,11 +1,14 @@
+import { Fruits } from '../../Contexts/Fruits';
 import TopNav from '../TopNav';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
-export default function List() {
+export default function Create() {
 
     const [name, setName] = useState('');
     const [color, setColor] = useState('#BF8431');
     const [form, setForm] = useState('square');
+
+    const { setCreateFruit } = useContext(Fruits);
 
     const add = _ => {
         const fruit = {
@@ -14,6 +17,7 @@ export default function List() {
             form
         };
         console.log(fruit);
+        setCreateFruit(fruit);
     }
 
     return (
