@@ -2,52 +2,67 @@ import { Fruits } from '../../Contexts/Fruits';
 import { Router } from '../../Contexts/Router';
 import TopNav from '../TopNav';
 import { useContext, useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 export default function Edit() {
 
     const [name, setName] = useState('');
     const [color, setColor] = useState('');
     const [form, setForm] = useState('');
-    const { fruits, setCreateFruit, setFruits } = useContext(Fruits);
+    const [fruit, setFruit] = useState(null);
+    const { fruits, setEditFruit, setFruits } = useContext(Fruits);
     const params = useContext(Router);
 
     useEffect(_ => {
-        if (null == fruits) {
+        if (null === fruits) {
             return;
         }
         const fruit = fruits.find(fruit => fruit.id === +params[1]);
-        if (null == fruit) {
+        if (!fruit) {
+            setFruit(null);
+        } else {
+            setFruit(fruit);
+        }
+    }, [fruits, params[1]]);
+
+    useEffect(_ => {
+        if (null === fruit) {
             return;
         }
         setName(fruit.name);
         setColor(fruit.color);
         setForm(fruit.form.toLowerCase());
+    }, [fruit, setName, setColor, setForm]);
 
-    }, [fruits, params[1]], setName, setColor, setForm);
-    
 
-    
 
-    const add = _ => {
-        const fruit = {
+
+    const save = _ => {
+        const editedFruit = {
             name,
             color,
             form,
-            id: uuidv4(),
+            id: fruit.id,
         };
-        setFruits(f => [...f, {...fruit, temp: true}]);
-        setCreateFruit(fruit);
+        setFruits(f => f.map(fruit => fruit.id === editedFruit.id ? {...editedFruit, temp: true} : fruit));
+        setEditFruit(editedFruit);
         window.location.href = '#fruits';
     }
 
     if (!fruits)
-    return (
-        <div>
-            <TopNav />
-            <h1>Loading...</h1>
-        </div>
-    );
+        return (
+            <div>
+                <TopNav />
+                <h1>Loading...</h1>
+            </div>
+        );
+    
+        if (!fruit)
+        return (
+            <div>
+                <TopNav />
+                <h1>Fruit not found</h1>
+            </div>
+        );
 
     return (
         <div>
@@ -80,7 +95,7 @@ export default function Edit() {
                             </div>
                         </div>
                     </div>
-                    <button className="green" onClick={add}>Add</button>
+                    <button className="green" onClick={save}>Save</button>
                 </div>
             </div>
         </div>

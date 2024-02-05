@@ -18,6 +18,7 @@ export default function Index() {
 
     } else if (params.length === 1 && params[0] === 'create') {
         returnComponent = <Create />;
+        
     } else if (params.length === 2 && params[0] === 'edit') {
         returnComponent = <Edit />;
     }
