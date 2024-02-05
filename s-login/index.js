@@ -71,6 +71,8 @@ app.use(doAuth);
 
 app.get('/fruits', (req, res) => {
 
+  console.log('Buvo užklausta /fruits');
+
   if (!checkUserIsLogged(req.user, res)) {
     return;
   }
@@ -104,7 +106,7 @@ app.post('/login', (req, res) => {
   const sql = 'SELECT * FROM users WHERE name = ? AND password = ?';
   connection.query(sql, [username, md5(password)], (err, results) => {
     if (err) {
-      res.status(500);
+      res.status(500).json({ message: 'Server error 1' });
     } else {
       if (results.length > 0) {
         const token = md5(uuidv4());
