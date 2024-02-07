@@ -16,7 +16,7 @@ export default function Fruit({fruit}) {
                 : 
                 <span>
                 <Gate roles="admin|user"><b><a href={'#fruits/edit/' + fruit.id}>Edit</a></b></Gate>
-                <Gate roles="admin|user"><b><a href={'#fruits/delete/' + fruit.id}>Delete</a></b></Gate>
+                <Gate roles="admin"><b><a href={'#fruits/delete/' + fruit.id}>Delete</a></b></Gate>
                 </span>
             }
 

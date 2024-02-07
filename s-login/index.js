@@ -182,6 +182,21 @@ app.post('/login', (req, res) => {
 
 });
 
+// Register
+
+app.post('/users', (req, res) => {
+
+  const { name, password } = req.body;
+  const sql = 'INSERT INTO users (name, password, role ) VALUES (?, ?, ?)';
+  connection.query(sql, [name, md5(password), 'animal'], (err) => {
+    if (err) {
+      res.status(500);
+    } else {
+      res.json({ success: true});
+    }
+  });
+});
+
 
 
 
