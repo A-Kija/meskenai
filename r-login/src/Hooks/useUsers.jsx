@@ -19,6 +19,11 @@ export default function useUsers() {
             return;
         }
 
+        if ('admin' !== user.role) {
+            setUsers([{name: user.user, id: +user.id, role: user.role}]);
+            return;
+        }
+
         const withTokenUrl = 
         user ? `${SERVER_URL}/users?token=${user.token}` : `${SERVER_URL}/users`;
 

@@ -6,6 +6,7 @@ import { UsersProvider } from '../../Contexts/Users';
 import Create from './Create';
 import List from './List';
 import Delete from './Delete';
+import Edit from './Edit';
 
 
 export default function Index({ to }) {
@@ -20,6 +21,8 @@ export default function Index({ to }) {
         returnComponent = <List />;
     } else if (params.length === 2 && params[0] === 'delete') {
         returnComponent = <Delete />;
+    } else if (params.length === 2 && params[0] === 'edit') {
+        returnComponent = <Edit />;
     }
 
 
