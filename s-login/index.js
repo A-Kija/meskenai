@@ -198,6 +198,24 @@ app.post('/users', (req, res) => {
 });
 
 
+// Users CRUD
+
+app.get('/users', (req, res) => {
+
+  // if (!checkUserIsAuthorized(req.user, res, ['admin', 'user', 'animal'])) {
+  //   return;
+  // }
+
+  const sql = 'SELECT * FROM users';
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
 
 
 

@@ -36,6 +36,7 @@ export default function useUsers() {
                         show401Page();
                     }
                 }
+                setUsers({error: true})
             });
     }, []);
     
@@ -44,11 +45,11 @@ export default function useUsers() {
         if (null !== createUser) {
 
             axios.post(`${SERVER_URL}/users`, createUser)
-                .then(res => {
+                .then(_ => {
                     setCreateUser(null);
 
                 })
-                .catch(err => {
+                .catch(_ => {
                     setCreateUser(null);
 
 
