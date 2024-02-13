@@ -40,6 +40,18 @@ app.get('/authors', (req, res) => {
   });
 });
 
+app.post('/authors', (req, res) => {
+  const { name, surname, nickname, born } = req.body;
+  const sql = 'INSERT INTO authors (name, surname, nickname, born) VALUES (?, ?, ?, ?)';
+  connection.query(sql, [name, surname, nickname, born], (err, result) => {
+    if (err) {
+      res.status(500);
+    } else {
+      res.json({ success: true, id: result.insertId, uuid: req.body.id });
+    }
+  });
+});
+
 
 
 

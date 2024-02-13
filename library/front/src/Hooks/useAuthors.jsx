@@ -20,33 +20,19 @@ export default function useAuthors(dispachAuthors) {
                 console.log(err);
             });
     }, []);
-    
-    
-    // useEffect(_ => {
-    //     if (null !== createAuthor) {
 
-    //         const withTokenUrl = 
-    //         user ? `${SERVER_URL}/fruits?token=${user.token}` : `${SERVER_URL}/fruits`;
 
-    //         axios.post(withTokenUrl, createAuthor)
-    //             .then(res => {
-    //                 setCreateAuthor(null);
-    //                 setAuthors(f => f.map(fruit => fruit.id === res.data.uuid ? {...fruit, id: res.data.id, temp: false} : fruit));
-    //             })
-    //             .catch(err => {
-    //                 setCreateAuthor(null);
-    //                 setAuthors(f => f.filter(fruit => fruit.id !== createAuthor.id));
-    //                 if (err.response) {
-    //                     if (err.response.status === 401) {
-    //                         if (err.response.data.status === 'login') {
-    //                             logout();
-    //                         }
-    //                         show401Page();
-    //                     }
-    //                 }
-    //             });
-    //     }
-    // }, [createAuthor]);
+    useEffect(_ => {
+        if (null !== createAuthor) {
+            axios.post(`${SERVER_URL}/authors`, createAuthor)
+                .then(res => {
+                    setCreateAuthor(null);
+                })
+                .catch(err => {
+                    setCreateAuthor(null);
+                });
+        }
+    }, [createAuthor]);
 
 
     // useEffect(_ => {
@@ -54,7 +40,7 @@ export default function useAuthors(dispachAuthors) {
 
     //         const withTokenUrl = 
     //         user ? `${SERVER_URL}/fruits/${editAuthor.id}?token=${user.token}` : `${SERVER_URL}/fruits/${editAuthor.id}`;
-            
+
     //         axios.put(withTokenUrl, editAuthor)
     //             .then(res => {
     //                 setEditAuthor(null);
