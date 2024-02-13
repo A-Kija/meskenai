@@ -10,8 +10,6 @@ export default function useAuthors(dispachAuthors) {
     const [editAuthor, setEditAuthor] = useState(null);
     const [deleteAuthor, setDeleteAuthor] = useState(null);
 
-
-
     useEffect(_ => {
         axios.get(`${SERVER_URL}/authors`)
             .then(res => {
