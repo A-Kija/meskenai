@@ -9,8 +9,10 @@ export default function List() {
     return (
         <>
             {
-                authors.map((author, index) => (
-                    <div key={index} className="card mt-2">
+                authors.map(author => (
+                    <div key={author.id} className="card mt-2" style={{
+                        opacity: author.temp ? 0.5 : 1
+                    }}>
                         <div className="card-header">
                             <h4>{author.name} {author.surname}</h4>
                         </div>
@@ -19,8 +21,8 @@ export default function List() {
                             <p>Born: {new Intl.DateTimeFormat('lt-LT').format(new Date(author.born))}</p>
                         </div>
                         <div className="card-footer">
-                            <button type="button" className="btn btn-danger m-2">Delete</button>
-                            <button type="button" className="btn btn-warning m-2">Edit</button>
+                            <button type="button" disabled={author.temp ? true : false} className="btn btn-danger m-2">Delete</button>
+                            <button type="button" disabled={author.temp ? true : false} className="btn btn-warning m-2">Edit</button>
                         </div>
                     </div>
                 ))
