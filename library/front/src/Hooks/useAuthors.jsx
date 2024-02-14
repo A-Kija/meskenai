@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { SERVER_URL } from '../Constants/main';
-import { getAuthors, storeAuthorAsTemp, storeAuthorAsReal } from '../Actions/authors';
+import { getAuthors, storeAuthorAsTemp, storeAuthorAsReal, deleteAuthorAsTemp, deleteAuthorAsReal } from '../Actions/authors';
 
 
 export default function useAuthors(dispachAuthors) {
@@ -66,31 +66,19 @@ export default function useAuthors(dispachAuthors) {
     //     }
     // }, [updateAuthor]);
 
-    // useEffect(_ => {
-    //     if (null !== destroyAuthor) {
-
-    //         const withTokenUrl = 
-    //         user ? `${SERVER_URL}/fruits/${destroyAuthor}?token=${user.token}` : `${SERVER_URL}/fruits/${destroyAuthor}`;
-
-    //         axios.delete(withTokenUrl)
-    //             .then(res => {
-    //                 setDestroyAuthor(null);
-    //                 setAuthors(f => f.filter(fruit => fruit.id !== res.data.id));
-    //             })
-    //             .catch(err => {
-    //                 setDestroyAuthor(null);
-    //                 setAuthors(f => f.map(fruit => fruit.id === destroyAuthor ? {...fruit, temp: false} : fruit));
-    //                 if (err.response) {
-    //                     if (err.response.status === 401) {
-    //                         if (err.response.data.status === 'login') {
-    //                             logout();
-    //                         }
-    //                         show401Page();
-    //                     }
-    //                 }
-    //             });
-    //     }
-    // }, [destroyAuthor]);
+    useEffect(_ => {
+        if (null !== destroyAuthor) {
+            dispachAuthors(deleteAuthorAsTemp(destroyAuthor));
+            axios.delete(`${SERVER_URL}/authors/${destroyAuthor.id}`)
+                .then(res => {
+                    setDestroyAuthor(null);
+                    dispachAuthors(deleteAuthorAsReal(res.data));
+                })
+                .catch(err => {
+                    setDestroyAuthor(null);
+                });
+        }
+    }, [destroyAuthor]);
 
 
 
