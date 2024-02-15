@@ -41,6 +41,10 @@ app.get('/authors', (req, res) => {
 });
 
 app.post('/authors', (req, res) => {
+
+  res.status(401).json({ status: 'login' });
+  return;
+
   const { name, surname, nickname, born } = req.body;
   const sql = 'INSERT INTO authors (name, surname, nickname, born) VALUES (?, ?, ?, ?)';
   connection.query(sql, [name, surname, nickname, born], (err, result) => {
@@ -53,6 +57,10 @@ app.post('/authors', (req, res) => {
 });
 
 app.delete('/authors/:id', (req, res) => {
+  
+  res.status(401).json({ status: 'login' });
+  return;
+
   const sql = 'DELETE FROM authors WHERE id = ?';
   connection.query(sql, [req.params.id], (err) => {
     if (err) {

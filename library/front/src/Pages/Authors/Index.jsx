@@ -3,6 +3,7 @@ import { AuthorsProvider } from "../../Contexts/Authors";
 import Create from "./Create";
 import Delete from "./Delete";
 import List from "./List";
+import Edit from "./Edit";
 
 export default function Index() {
 
@@ -28,6 +29,7 @@ export default function Index() {
                 </div>
             </div>
             <Delete />
+            <Edit />
         </AuthorsProvider>
     )
 }
