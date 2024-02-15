@@ -1,14 +1,19 @@
 import { useContext, useState } from 'react';
 import { Authors } from '../../Contexts/Authors';
 
+
 export default function Edit() {
 
     const { editAuthor, setEditAuthor, setUpdateAuthor } = useContext(Authors);
 
-    const [inputs, setInputs] = useState(editAuthor);
+    const [inputs, setInputs] = useState({...editAuthor, born: editAuthor.born.split('T')[0]});
 
-    console.log(editAuthor);
-    console.log(inputs);
+    // useEffect(_ => {
+    //     console.log('MOUNT edit');
+    //     return _ => console.log('UNMOUNT edit');
+    // }, []);
+
+    console.log('editAuthor', editAuthor);
 
     const handleChange = e => {
         setInputs(prev => ({ ...prev, [e.target.id]: e.target.value }));
@@ -16,10 +21,8 @@ export default function Edit() {
 
     const submit = _ => {
         setUpdateAuthor({ ...editAuthor, ...inputs });
-        setUpdateAuthor(null);
+        setEditAuthor(null);
     }
-
-    if (!editAuthor) return null;
 
     return (
         <div className="modal">
@@ -48,8 +51,8 @@ export default function Edit() {
                         </div>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-danger" onClick={submit}>Delete</button>
-                        <button type="button" className="btn btn-secondary" onClick={_ => setEditAuthor(null)}>Cancel Delete</button>
+                        <button type="button" className="btn btn-success" onClick={submit}>Save</button>
+                        <button type="button" className="btn btn-secondary" onClick={_ => setEditAuthor(null)}>Cancel Edit</button>
                     </div>
                 </div>
             </div>

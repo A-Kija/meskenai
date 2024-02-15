@@ -5,6 +5,11 @@ export default function Delete() {
 
     const { deleteAuthor, setDeleteAuthor, setDestroyAuthor } = useContext(Authors);
 
+    // useEffect(_ => {
+    //     console.log('MOUNT delete');
+    //     return _ => console.log('UNMOUNT delete');
+    // }, []);
+
     const submit = _ => {
         setDestroyAuthor(deleteAuthor);
         setDeleteAuthor(null);

@@ -40,32 +40,17 @@ export default function useAuthors(dispachAuthors) {
     }, [storeAuthor, dispachAuthors]);
 
 
-    // useEffect(_ => {
-    //     if (null !== updateAuthor) {
-
-    //         const withTokenUrl = 
-    //         user ? `${SERVER_URL}/fruits/${updateAuthor.id}?token=${user.token}` : `${SERVER_URL}/fruits/${updateAuthor.id}`;
-
-    //         axios.put(withTokenUrl, updateAuthor)
-    //             .then(res => {
-    //                 setUpdateAuthor(null);
-    //                 setAuthors(f => f.map(fruit => fruit.id === res.data.id ? {...fruit, temp: false} : fruit));
-    //             })
-    //             .catch(err => {
-    //                 setUpdateAuthor(null);
-    //                 setAuthors(f => f.map(fruit => fruit.id === updateAuthor.id ? {...fruit.preEdit, temp: false} : fruit));
-    //                 if (err.response) {
-    //                     console.log(err.response);
-    //                     if (err.response.status === 401) {
-    //                         if (err.response.data.status === 'login') {
-    //                             logout();
-    //                         }
-    //                         show401Page();
-    //                     }
-    //                 }
-    //             });
-    //     }
-    // }, [updateAuthor]);
+    useEffect(_ => {
+        if (null !== updateAuthor) {
+            axios.put(`${SERVER_URL}/authors/${updateAuthor.id}`, updateAuthor)
+                .then(res => {
+                    setUpdateAuthor(null);
+                })
+                .catch(err => {
+                    setUpdateAuthor(null);
+                });
+        }
+    }, [updateAuthor]);
 
     useEffect(_ => {
         if (null !== destroyAuthor) {
