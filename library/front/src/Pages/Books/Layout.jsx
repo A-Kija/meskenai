@@ -2,9 +2,10 @@ import Nav from '../../Components/Nav';
 import { Books } from '../../Contexts/Books';
 import Create from './Create';
 // import Delete from './Delete';
-// import List from './List';
+import List from './List';
 // import Edit from './Edit'
 import { useContext } from 'react';
+
 
 
 export default function Layout() {
@@ -28,7 +29,7 @@ export default function Layout() {
                         <Create />
                     </div>
                     <div className="col-8 mt-4">
-                        list
+                        <List />
                     </div>
                 </div>
             </div>
