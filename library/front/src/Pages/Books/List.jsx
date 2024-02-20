@@ -27,7 +27,7 @@ export default function List() {
                                     <div className="card-body">
                                         <p>Pages: {book.pages}</p>
                                         <p>Genre: {book.genre}</p>
-                                        <p>Author: {book.author.name} {book.author.surname}</p>
+                                        <p>Author: {book?.author?.name} {book?.author?.surname}</p>
                                     </div>
                                     <div className="card-footer">
                                         <button

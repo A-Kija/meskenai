@@ -40,7 +40,7 @@ app.get('/authors', (req, res) => {
 
 app.get('/books', (req, res) => {
   const sql = `
-    SELECT b.id, title, pages, genre, name, surname
+    SELECT b.id, title, pages, genre, name, surname, author_id
     FROM books as b
     LEFT JOIN authors as a 
     ON b.author_id = a.id
@@ -93,6 +93,19 @@ app.post('/books', (req, res) => {
     });
   });
 
+  app.delete('/books/:id', (req, res) => {
+      const sql = 'DELETE FROM books WHERE id = ?';
+      connection.query(sql, [req.params.id], (err) => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.json({ success: true, id: +req.params.id });
+        }
+      }
+    );
+  });
+
+
   app.put('/authors/:id', (req, res) => {
 
     const { name, surname, nickname, born } = req.body;
@@ -105,6 +118,19 @@ app.post('/books', (req, res) => {
       }
     });
   });
+
+  app.put('/books/:id', (req, res) => {
+      
+      const { title, pages, genre, author_id } = req.body;
+      const sql = 'UPDATE books SET title = ?, pages = ?, genre = ?, author_id = ? WHERE id = ?';
+      connection.query(sql, [title, pages, genre, author_id, req.params.id], (err) => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.json({ success: true, id: +req.params.id });
+        }
+      });
+    });
 
 
 

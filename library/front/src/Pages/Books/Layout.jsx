@@ -1,16 +1,16 @@
 import Nav from '../../Components/Nav';
 import { Books } from '../../Contexts/Books';
 import Create from './Create';
-// import Delete from './Delete';
+import Delete from './Delete';
 import List from './List';
-// import Edit from './Edit'
+import Edit from './Edit'
 import { useContext } from 'react';
 
 
 
 export default function Layout() {
 
-    const { editBook } = useContext(Books);
+    const { editBook, deleteBook } = useContext(Books);
 
     return (
         <>
@@ -33,7 +33,8 @@ export default function Layout() {
                     </div>
                 </div>
             </div>
-
+            {editBook && <Edit />}
+            {deleteBook && <Delete />}
         </>
     );
 }
