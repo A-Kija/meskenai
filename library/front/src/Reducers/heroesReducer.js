@@ -8,10 +8,13 @@ export default function heroesReducer(state, action) {
         case constants.GET_HEROES_FROM_SERVER:
             newState = action.payload.map(hero => {
                 hero.author = {};
-                hero.author.name = hero.name;
-                hero.author.surname = hero.surname;
-                delete hero.name;
-                delete hero.surname;
+                hero.book = {};
+                hero.author.name = hero.authorName;
+                hero.author.surname = hero.authorSurname;
+                hero.book.title = hero.title;
+                delete hero.authorName;
+                delete hero.authorSurname;
+                delete hero.title;
                 return hero;
             });
             break;

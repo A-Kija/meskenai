@@ -19,7 +19,7 @@ export default function Delete() {
                         <button type="button" className="btn-close" aria-label="Close" onClick={_ => setDeleteHero(null)}></button>
                     </div>
                     <div className="modal-body">
-                        <p>Are you sure to delete {deleteHero.title}?</p>
+                        <p>Are you sure to delete {deleteHero.name}?</p>
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-danger" onClick={submit}>Delete</button>

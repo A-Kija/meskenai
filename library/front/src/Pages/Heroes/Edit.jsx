@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Heroes } from '../../Contexts/Heroes';
-import useAuthorsDropdown from '../../Hooks/useAuthorsDropdown';
+import useBooksDropdown from '../../Hooks/useBooksDropdown';
 
 
 export default function Edit() {
@@ -9,7 +9,7 @@ export default function Edit() {
 
     const [inputs, setInputs] = useState(editHero);
 
-    const { authorsDropdown } = useAuthorsDropdown();
+    const { booksDropdown } = useBooksDropdown();
 
 
     const handleChange = e => {
@@ -18,10 +18,13 @@ export default function Edit() {
 
     const submit = _ => {
         const author = {
-            surname: authorsDropdown.find(author => author.id === +inputs.author_id).surname,
-            name: authorsDropdown.find(author => author.id === +inputs.author_id).name
+            surname: booksDropdown.find(book => book.id === +inputs.book_id).surname,
+            name: booksDropdown.find(book => book.id === +inputs.book_id).name
         }
-        setUpdateHero({ ...editHero, ...inputs, old: editHero, author });
+        const book = {
+            title: booksDropdown.find(book => book.id === +inputs.book_id).title
+        }
+        setUpdateHero({ ...editHero, ...inputs, old: editHero, author, book });
         setEditHero(null);
     }
 
@@ -35,29 +38,26 @@ export default function Edit() {
                     </div>
                     <div className="modal-body">
                         <div className="mb-3">
-                            <label htmlFor="title" className="form-label">Title</label>
-                            <input type="text" className="form-control" id="title" value={inputs.title} onChange={handleChange} />
+                            <label htmlFor="name" className="form-label">Name</label>
+                            <input type="text" className="form-control" id="name" value={inputs.name} onChange={handleChange} />
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="pages" className="form-label">Total pages</label>
-                            <input type="text" className="form-control" id="pages" value={inputs.pages} onChange={handleChange} />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="genre" className="form-label">Genre</label>
-                            <input type="text" className="form-control" id="genre" value={inputs.genre} onChange={handleChange} />
+                            <label htmlFor="good" className="form-label">Good/Bad</label>
+                            <h5 style={{ cursor: 'pointer', display: inputs.good ? 'block' : 'none' }} onClick={_ => handleChange({ target: { value: 0, id: 'good' } })}>Good</h5>
+                            <h5 style={{ cursor: 'pointer', display: inputs.good ? 'none' : 'block' }} onClick={_ => handleChange({ target: { value: 1, id: 'good' } })}>Bad</h5>
                         </div>
                         {
-                            authorsDropdown &&
-                            <div className="mb-3">
-                                <label htmlFor="author_id" className="form-label">Author</label>
-                                <select className="form-select" id="author_id" value={inputs.author_id} onChange={handleChange}>
-                                    <option value="">Select author</option>
-                                    {
-                                        authorsDropdown.map(author => <option key={author.id} value={author.id}>{author.name} {author.surname}</option>)
-                                    }
-                                </select>
-                            </div>
-                        }
+                    booksDropdown &&
+                    <div className="mb-3">
+                        <label htmlFor="book_id" className="form-label">Book</label>
+                        <select className="form-select" id="book_id" value={inputs.book_id} onChange={handleChange}>
+                            <option value="">Select book</option>
+                            {
+                                booksDropdown.map(book => <option key={book.id} value={book.id}>{book.title}</option>)
+                            }
+                        </select>
+                    </div>
+                }
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-success" onClick={submit}>Save</button>

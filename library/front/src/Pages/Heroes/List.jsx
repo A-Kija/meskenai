@@ -15,18 +15,18 @@ export default function List() {
                             hero.deleted
                                 ?
                                 <div className="alert alert-danger mt-2" role="alert">
-                                    {hero.title} was deleted
+                                    {hero.name} was deleted
                                 </div>
                                 :
                                 <div className="card mt-2" style={{
                                     opacity: hero.temp ? 0.5 : 1
                                 }}>
                                     <div className="card-header">
-                                        <h4>{hero.title}</h4>
+                                        <h4>{hero.name}</h4>
                                     </div>
                                     <div className="card-body">
-                                        <p>Pages: {hero.pages}</p>
-                                        <p>Genre: {hero.genre}</p>
+                                        <p>Hero is: {hero.good ? 'good' : 'bad'}</p>
+                                        <p>Book: {hero?.book?.title}</p>
                                         <p>Author: {hero?.author?.name} {hero?.author?.surname}</p>
                                     </div>
                                     <div className="card-footer">

@@ -16,7 +16,6 @@ export default function useHeroes(dispachHeroes) {
     useEffect(_ => {
         axios.get(`${SERVER_URL}/heroes`)
             .then(res => {
-                console.log(res.data);
                 dispachHeroes(a.getHeroes(res.data))
             })
             .catch(err => {

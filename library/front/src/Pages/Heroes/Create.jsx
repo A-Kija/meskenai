@@ -14,18 +14,21 @@ export default function Create() {
 
     const { booksDropdown } = useBooksDropdown();
 
-    const { setStoreHero } = useContext(Heroes);
+     const { setStoreHero } = useContext(Heroes);
 
     const handleChange = e => {
         setInputs(prev => ({ ...prev, [e.target.id]: e.target.value }));
     }
 
     const create = _ => {
-        const book = {
+        const author = {
             surname: booksDropdown.find(book => book.id === +inputs.book_id).surname,
             name: booksDropdown.find(book => book.id === +inputs.book_id).name
         }
-        setStoreHero({...inputs, book});
+        const book = {
+            title: booksDropdown.find(book => book.id === +inputs.book_id).title
+        }
+        setStoreHero({...inputs, author, book});
         setInputs(defaultInputs);
     }
 
