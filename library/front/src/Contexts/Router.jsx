@@ -3,6 +3,7 @@ import { createContext, useEffect, useState } from 'react';
 import Page404 from '../Pages/Page404.jsx';
 import AuthorIndex from '../Pages/Authors/Index.jsx';
 import BookIndex from '../Pages/Books/Index.jsx';
+import HeroIndex from '../Pages/Heroes/Index.jsx';
 
 export const Router = createContext();
 
@@ -31,7 +32,8 @@ export const RouterProvider = () => {
 
     const routes = [
         { path: '#authors', component: <AuthorIndex /> },
-        { path: '#books', component: <BookIndex /> }
+        { path: '#books', component: <BookIndex /> },
+        { path: '#heroes', component: <HeroIndex /> }
 
 
     ];

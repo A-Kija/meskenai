@@ -54,6 +54,24 @@ app.get('/books', (req, res) => {
   });
 });
 
+app.get('/heroes', (req, res) => {
+  const sql = `
+    SELECT h.id, h.name, a.name AS authorName, a.surname AS authorSurname, good, book_id, title
+    FROM heroes as h
+    LEFT JOIN books as b 
+    ON h.book_id = b.id
+    LEFT JOIN authors as a
+    ON b.author_id = a.id
+  `;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
 
 
 app.post('/authors', (req, res) => {
@@ -72,6 +90,18 @@ app.post('/books', (req, res) => {
   const { title, pages, genre, author_id } = req.body;
   const sql = 'INSERT INTO books (title, pages, genre, author_id) VALUES (?, ?, ?, ?)';
   connection.query(sql, [title, pages, genre, author_id], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json({ success: true, id: result.insertId, uuid: req.body.id });
+    }
+  });
+});
+
+app.post('/heroes', (req, res) => {
+  const { name, good, book_id } = req.body;
+  const sql = 'INSERT INTO heroes (name, good, book_id) VALUES (?, ?, ?)';
+  connection.query(sql, [name, good, book_id], (err, result) => {
     if (err) {
       res.status(500).send(err);
     } else {
