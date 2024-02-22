@@ -14,8 +14,8 @@ const app = express();
 const port = 3001;
 
 app.use(cors());
-app.use(cors());
 app.use(express.static('public'));
+
 app.use(bodyParser.json());
 
 connection.connect();
@@ -76,7 +76,7 @@ app.get('/books', (req, res) => {
 
 app.get('/heroes', (req, res) => {
   const sql = `
-    SELECT h.id, h.name, a.name AS authorName, a.surname AS authorSurname, good, title, book_id
+    SELECT h.id, h.name, a.name AS authorName, a.surname AS authorSurname, good, title, book_id, h.image
     FROM heroes as h
     LEFT JOIN books as b 
     ON h.book_id = b.id
