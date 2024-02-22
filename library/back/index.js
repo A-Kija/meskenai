@@ -27,6 +27,26 @@ app.get('/', (req, res) => {
   res.send('Labas Bebrai!');
 });
 
+app.get('/stats', (req, res) => {
+  const sql = `
+  SELECT 'authors' AS name, COUNT(*) AS count, NULL AS stats
+  FROM authors
+  UNION
+  SELECT 'books', COUNT(*), MAX(pages)
+  FROM books
+  UNION
+  SELECT 'heroes', COUNT(*), SUM(good)
+  FROM Heroes
+  `;
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
 app.get('/authors', (req, res) => {
   const sql = 'SELECT * FROM authors';
   connection.query(sql, (err, results) => {
@@ -146,6 +166,7 @@ app.delete('/heroes/:id', (req, res) => {
     }
   });
 });
+
 
 
 app.put('/authors/:id', (req, res) => {
