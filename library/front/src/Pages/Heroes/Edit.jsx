@@ -1,6 +1,7 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Heroes } from '../../Contexts/Heroes';
 import useBooksDropdown from '../../Hooks/useBooksDropdown';
+import useImage from '../../Hooks/useImage';
 
 
 export default function Edit() {
@@ -9,9 +10,25 @@ export default function Edit() {
 
     const [inputs, setInputs] = useState(editHero);
 
+    const [deleteImage, setDeleteImage] = useState(false);  
+
     const { booksDropdown } = useBooksDropdown();
 
+    const { image, readImage, setImage } = useImage();
+
     const imageInput = useRef();
+
+
+    useEffect(_ => {
+        setImage(editHero?.image);
+    }, [editHero, setImage]);
+
+
+    useEffect(_ => {
+        if (image && deleteImage) {
+            setDeleteImage(false);
+        }
+    }, [image, deleteImage, setDeleteImage]);
 
 
     const handleChange = e => {
@@ -19,6 +36,9 @@ export default function Edit() {
     }
 
     const submit = _ => {
+
+        const imageToServer = image !== editHero.image ? image : null;
+
         const author = {
             surname: booksDropdown.find(book => book.id === +inputs.book_id).surname,
             name: booksDropdown.find(book => book.id === +inputs.book_id).name
@@ -26,7 +46,7 @@ export default function Edit() {
         const book = {
             title: booksDropdown.find(book => book.id === +inputs.book_id).title
         }
-        setUpdateHero({ ...editHero, ...inputs, old: editHero, author, book });
+        setUpdateHero({ ...editHero, ...inputs, old: editHero, author, book, image: imageToServer, del: deleteImage });
         setEditHero(null);
     }
 
@@ -62,13 +82,20 @@ export default function Edit() {
                         }
 
                         <div className="mb-3">
-                            <label htmlFor="image" className="form-label">Image</label>
-                            <input ref={imageInput} type="file" className="form-control" id="image" />
+                            <label className="form-label">
+                                <span>Image</span>
+                                <h6 style={{ cursor: 'pointer', marginLeft: '10px', display: image ? 'inline-block' : 'none' }} onClick={_ => {
+                                    setDeleteImage(true);
+                                    setImage(null);
+                                    imageInput.current.value = null;
+                                }}>Delete</h6>
+                            </label>
+                            <input ref={imageInput} type="file" className="form-control" onChange={readImage} />
                         </div>
                         {
-                            editHero &&
+                            image &&
                             <div className="mb-3">
-                                <img src={editHero.image} alt={editHero.name} className="img-fluid" />
+                                <img src={image} alt={editHero.name} className="img-fluid" />
                             </div>
                         }
                     </div>

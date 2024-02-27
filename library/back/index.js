@@ -148,7 +148,7 @@ app.post('/heroes', (req, res) => {
 
   const { name, good, book_id } = req.body;
   const sql = 'INSERT INTO heroes (name, good, book_id, image) VALUES (?, ?, ?, ?)';
-  connection.query(sql, [name, good, book_id, 'images/' + filename], (err, result) => {
+  connection.query(sql, [name, good, book_id, filename !== null ? ('images/' + filename) : null], (err, result) => {
     if (err) {
       res.status(500).send(err);
     } else {
