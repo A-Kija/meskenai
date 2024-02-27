@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { Heroes } from '../../Contexts/Heroes';
 import useBooksDropdown from '../../Hooks/useBooksDropdown';
 
@@ -10,6 +10,8 @@ export default function Edit() {
     const [inputs, setInputs] = useState(editHero);
 
     const { booksDropdown } = useBooksDropdown();
+
+    const imageInput = useRef();
 
 
     const handleChange = e => {
@@ -47,17 +49,28 @@ export default function Edit() {
                             <h5 style={{ cursor: 'pointer', display: inputs.good ? 'none' : 'block' }} onClick={_ => handleChange({ target: { value: 1, id: 'good' } })}>Bad</h5>
                         </div>
                         {
-                    booksDropdown &&
-                    <div className="mb-3">
-                        <label htmlFor="book_id" className="form-label">Book</label>
-                        <select className="form-select" id="book_id" value={inputs.book_id} onChange={handleChange}>
-                            <option value="">Select book</option>
-                            {
-                                booksDropdown.map(book => <option key={book.id} value={book.id}>{book.title}</option>)
-                            }
-                        </select>
-                    </div>
-                }
+                            booksDropdown &&
+                            <div className="mb-3">
+                                <label htmlFor="book_id" className="form-label">Book</label>
+                                <select className="form-select" id="book_id" value={inputs.book_id} onChange={handleChange}>
+                                    <option value="">Select book</option>
+                                    {
+                                        booksDropdown.map(book => <option key={book.id} value={book.id}>{book.title}</option>)
+                                    }
+                                </select>
+                            </div>
+                        }
+
+                        <div className="mb-3">
+                            <label htmlFor="image" className="form-label">Image</label>
+                            <input ref={imageInput} type="file" className="form-control" id="image" />
+                        </div>
+                        {
+                            editHero &&
+                            <div className="mb-3">
+                                <img src={editHero.image} alt={editHero.name} className="img-fluid" />
+                            </div>
+                        }
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-success" onClick={submit}>Save</button>
