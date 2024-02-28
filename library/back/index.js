@@ -250,7 +250,7 @@ app.put('/heroes/:id', (req, res) => {
   const { name, good, book_id } = req.body;
   let sql;
   let params;
-  if (req.body.del) {
+  if (req.body.del || filename !== null) {
     sql = 'UPDATE heroes SET name = ?, good = ?, book_id = ?, image = ? WHERE id = ?';
     params = [name, good, book_id, filename !== null ? ('images/' + filename) : null, req.params.id];
   } else {
