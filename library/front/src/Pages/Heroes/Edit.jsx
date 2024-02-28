@@ -18,17 +18,14 @@ export default function Edit() {
 
     const imageInput = useRef();
 
-
     useEffect(_ => {
         setImage(editHero?.image);
     }, [editHero, setImage]);
 
-
     useEffect(_ => {
-        if (image && deleteImage) {
-            setDeleteImage(false);
-        }
-    }, [image, deleteImage, setDeleteImage]);
+        if (image)
+        setDeleteImage(true);
+    }, [image]);
 
 
     const handleChange = e => {
@@ -38,6 +35,9 @@ export default function Edit() {
     const submit = _ => {
 
         const imageToServer = image !== editHero.image ? image : null;
+
+        console.log(deleteImage, imageToServer);
+        return;
 
         const author = {
             surname: booksDropdown.find(book => book.id === +inputs.book_id).surname,
