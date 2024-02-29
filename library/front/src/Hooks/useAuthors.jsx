@@ -38,7 +38,7 @@ export default function useAuthors(dispachAuthors) {
                 .catch(err => {
                     dispachAuthors(a.storeAuthorAsUndo({ ...storeAuthor, id: uuid }));
                     setStoreAuthor(null);
-                    err.response && addMessage(err.response.data.message);
+                    err?.response?.data?.message && addMessage(err.response.data.message);
                 });
         }
     }, [storeAuthor, dispachAuthors, addMessage]);
@@ -57,7 +57,7 @@ export default function useAuthors(dispachAuthors) {
                 .catch(err => {
                     setUpdateAuthor(null);
                     dispachAuthors(a.updateAuthorAsUndo(updateAuthor));
-                    err.response && addMessage(err.response.data.message);
+                    err?.response?.data?.message && addMessage(err.response.data.message);
                 });
         }
     }, [updateAuthor, dispachAuthors, addMessage]);
@@ -74,7 +74,7 @@ export default function useAuthors(dispachAuthors) {
                 .catch(err => {
                     dispachAuthors(a.deleteAuthorAsUndo(destroyAuthor));
                     setDestroyAuthor(null);
-                    err.response && addMessage(err.response.data.message);
+                    err?.response?.data?.message && addMessage(err.response.data.message);
                 });
         }
     }, [destroyAuthor, dispachAuthors, addMessage]);

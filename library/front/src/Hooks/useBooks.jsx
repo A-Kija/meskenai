@@ -39,7 +39,7 @@ export default function useBooks(dispachBooks) {
                 .catch(err => {
                     dispachBooks(a.storeBookAsUndo({ id: uuid }));
                     setStoreBook(null);
-                    err.response && addMessage(err.response.data.message);
+                    err?.response?.data?.message && addMessage(err.response.data.message);
                 });
         }
     }, [storeBook, dispachBooks, addMessage]);
@@ -56,7 +56,7 @@ export default function useBooks(dispachBooks) {
                 .catch(err => {
                     dispachBooks(a.deleteBookAsUndo(destroyBook));
                     setDestroyBook(null);
-                    err.response && addMessage(err.response.data.message);
+                    err?.response?.data?.message && addMessage(err.response.data.message);
                 });
         }
     }, [destroyBook, dispachBooks, addMessage]);
@@ -76,7 +76,7 @@ export default function useBooks(dispachBooks) {
                 .catch(err => {
                     setUpdateBook(null);
                     dispachBooks(a.updateBookAsUndo(updateBook));
-                    err.response && addMessage(err.response.data.message);
+                    err?.response?.data?.message && addMessage(err.response.data.message);
                 });
         }
     }, [updateBook, dispachBooks, addMessage]);

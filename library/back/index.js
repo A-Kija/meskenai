@@ -202,7 +202,21 @@ app.delete('/authors/:id', (req, res) => {
 });
 
 app.delete('/books/:id', (req, res) => {
-  const sql = 'DELETE FROM books WHERE id = ?';
+  let sql;
+  sql = 'SELECT image FROM heroes WHERE book_id = ?';
+  connection.query(sql, [req.params.id], (err, results) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      results.forEach(hero => {
+        if (hero.image) {
+          fs.unlinkSync('public/' + hero.image);
+        }
+      });
+    }
+  });
+
+  sql = 'DELETE FROM books WHERE id = ?';
   connection.query(sql, [req.params.id], (err) => {
     if (err) {
       res.status(500).send(err);
