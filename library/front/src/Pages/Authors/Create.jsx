@@ -1,5 +1,8 @@
 import { useContext, useState } from 'react';
 import { Authors } from '../../Contexts/Authors';
+import * as v from '../../Validators/textInputs';
+import { MessagesContext } from '../../Contexts/Messages';
+
 
 const defaultInputs = {
     name: '',
@@ -13,12 +16,33 @@ export default function Create() {
     const [inputs, setInputs] = useState(defaultInputs);
 
     const { setStoreAuthor } = useContext(Authors);
+    const { addMessage } = useContext(MessagesContext);
+    const [e, setE] = useState(new Map());
+
+ 
 
     const handleChange = e => {
         setInputs(prev => ({ ...prev, [e.target.id]: e.target.value }));
     }
 
     const create = _ => {
+
+        const errors = new Map();
+
+        v.validate(inputs.name, 'name', errors, [v.isNotEmpty, v.isString]);
+        v.validate(inputs.surname, 'surname', errors, [v.isNotEmpty, v.isString]);
+
+        if (errors.size > 0) {
+            errors.forEach(err => addMessage({ type: 'danger', text: err }));
+            setE(errors);
+            console.log(errors);
+            
+            return;
+        }
+
+        
+
+        return;
         setStoreAuthor(inputs);
         setInputs(defaultInputs);
     }
@@ -31,11 +55,11 @@ export default function Create() {
             <div className="card-body">
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Name</label>
-                    <input type="text" className="form-control" id="name" value={inputs.name} onChange={handleChange} />
+                    <input type="text" className="form-control" style={{borderColor: e.has('name') ? 'crimson' : null}} id="name" value={inputs.name} onChange={handleChange} />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="surname" className="form-label">Surname</label>
-                    <input type="text" className="form-control" id="surname" value={inputs.surname} onChange={handleChange} />
+                    <input type="text" className="form-control"style={{borderColor: e.has('surname') ? 'crimson' : null}} id="surname" value={inputs.surname} onChange={handleChange} />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="nickname" className="form-label">Nickname</label>
