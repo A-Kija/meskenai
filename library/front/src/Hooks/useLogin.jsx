@@ -18,7 +18,7 @@ export default function useLogin() {
                 .then(res => {
                     login(res.data.name, res.data.role, res.data.id);
                     window.location.href = `${SITE_URL}/${AFTER_LOGIN_URL}`;
-                    addMessage({ type: 'success', text: 'Welcome to the Library, ' + res.data.name});
+                    addMessage({ type: 'success', text: 'Welcome to the Library, ' + res.data.name });
 
                 })
                 .catch(error => {
@@ -31,11 +31,11 @@ export default function useLogin() {
         }
     }, [inputs, login, addMessage]);
 
-    
+
 
     const logout = _ => {
 
-        axios.post(`${SERVER_URL}/logout`, { withCredentials: true })
+        axios.post(`${SERVER_URL}/logout`, {}, { withCredentials: true })
             .then(res => {
                 window.localStorage.removeItem('user');
                 window.localStorage.removeItem('role');
@@ -55,5 +55,5 @@ export default function useLogin() {
 
 
 
-    return {setInputs, logout};
+    return { setInputs, logout };
 }
