@@ -4,6 +4,7 @@ import Gate from './Auth/Gate';
 
 
 export default function TopNav() {
+    
 
     const { user, logout } = useContext(Auth);
 
