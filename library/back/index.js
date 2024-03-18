@@ -109,6 +109,22 @@ const doAuth = (req, res, next) => {
 
 app.use(doAuth);
 
+// FRONT OFFICE //
+
+app.get('/', (req, res) => {
+
+  const sql = 'SELECT * FROM authors';
+  connection.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json(results);
+    }
+  });
+  
+});
+
+
 
 
 //login
