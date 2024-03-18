@@ -3,13 +3,14 @@ import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { Router } from '../Contexts/Router.jsx';
 
-export default function useGet(url) {
+export default function useGet(startUrl) {
 
     const SERVER_URL = 'http://library.org';
 
     const {setErrorPageType} = useContext(Router);
-
-    const [data, setData] = useState(null);
+    
+    const [url, setUrl] = useState(startUrl);
+    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(_ => {
@@ -25,7 +26,7 @@ export default function useGet(url) {
             });
     }, [url]);
 
-    return { data, loading };
+    return { data, loading, setUrl };
 }
 
 
