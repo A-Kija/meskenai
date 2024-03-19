@@ -14,16 +14,16 @@ export default function Index() {
     const { data, loading, setUrl } = useGet('/');
 
 
-    const authorsBooks = data => {
-        const authors = [];
-        data.forEach(item => {
-            if (!authors.some(author => author.id === item.id)) {
-                authors.push({ id: item.id, name: item.name, surname: item.surname, books: [] });
-            }
-            authors.find(author => author.id === item.id).books.push({ id: item.book_id, title: item.title });
-        });
-        return authors;
-    };
+    // const authorsBooks = data => {
+    //     const authors = [];
+    //     data.forEach(item => {
+    //         if (!authors.some(author => author.id === item.id)) {
+    //             authors.push({ id: item.id, name: item.name, surname: item.surname, books: [] });
+    //         }
+    //         authors.find(author => author.id === item.id).books.push({ id: item.book_id, title: item.title });
+    //     });
+    //     return authors;
+    // };
 
 
 
@@ -36,7 +36,7 @@ export default function Index() {
             if (!authors.find(author => author.id === item.id).books.some(book => book.id === item.book_id)) {
                 authors.find(author => author.id === item.id).books.push({ id: item.book_id, title: item.title, heroes: [] });
             }
-            authors.find(author => author.id === item.id).books.find(book => book.id === item.book_id).heroes.push({ id: item.hero_id, name: item.hero });
+            authors.find(author => author.id === item.id).books.find(book => book.id === item.book_id).heroes.push({ id: item.hero_id, name: item.hero, good: item.good});
         });
         return authors;
     }
@@ -103,14 +103,31 @@ export default function Index() {
                                                 <div className="col-4">
                                                     <ul>
                                                         {
-                                                            item.books.map(book => <li key={book.id}>{book.title}</li>)
+                                                            item.books.map(book => <li key={book.id} className="mb-20" style={{marginBottom: (book.heroes.length * 21) + 'px'}} >{book.title}</li>)
                                                         }
                                                     </ul>
                                                 </div>
                                                 <div className="col-4">
                                                     <ul>
                                                         {
-                                                            item.books.map(book => book.heroes.map(hero => <li key={hero.id}>{hero.name}</li>))
+                                                            item.books.map(book => 
+                                                            <li key={book.id}>
+                                                                {
+                                                                book.heroes[0].id !== null 
+                                                                ?
+                                                                <ol className="mb-20">
+                                                                {book.heroes.map(hero => <li style={{color: hero.good ? 'orange' : 'skyblue'}}  key={hero.id}>
+                                                                    <a  style={{
+                                                                        color: hero.good ? 'orange' : 'skyblue',
+                                                                        textDecoration: 'none'
+                                                                        }} href={'#hero/' + hero.id}>{hero.name}</a>
+                                                                </li>)}
+                                                                </ol>
+                                                                :
+                                                                <div className="ms-3 mb-20">No heroes</div>
+                                                                }
+                                                            </li>
+                                                            )
                                                         }
                                                     </ul>
                                                 </div>
