@@ -19,15 +19,29 @@ export default function Index() {
         data.forEach(item => {
             if (!authors.some(author => author.id === item.id)) {
                 authors.push({ id: item.id, name: item.name, surname: item.surname, books: [] });
-            } 
+            }
             authors.find(author => author.id === item.id).books.push({ id: item.book_id, title: item.title });
         });
         return authors;
     };
 
-    console.log(authorsBooks(data));
 
 
+    const authorsBooksHeroes = data => {
+        const authors = [];
+        data.forEach(item => {
+            if (!authors.some(author => author.id === item.id)) {
+                authors.push({ id: item.id, name: item.name, surname: item.surname, books: [] });
+            }
+            if (!authors.find(author => author.id === item.id).books.some(book => book.id === item.book_id)) {
+                authors.find(author => author.id === item.id).books.push({ id: item.book_id, title: item.title, heroes: [] });
+            }
+            authors.find(author => author.id === item.id).books.find(book => book.id === item.book_id).heroes.push({ id: item.hero_id, name: item.hero });
+        });
+        return authors;
+    }
+
+    console.log(authorsBooksHeroes(data));
 
     useEffect(_ => {
         if (sort) {
@@ -75,11 +89,30 @@ export default function Index() {
                             </div>
                             <div className="card-body">
                                 <div className="container">
+                                    <div className="row mb-3">
+                                        <div className="col-2"><h4>Authors</h4></div>
+                                        <div className="col-4"><h4>Books</h4></div>
+                                        <div className="col-4"><h4>Heroes</h4></div>
+                                    </div>
                                     {
-                                        authorsBooks(data).map(item =>
+                                        authorsBooksHeroes(data).map(item =>
                                             <div className="row" key={item.id}>
                                                 <div className="col-2">
                                                     {item.name} {item.surname}
+                                                </div>
+                                                <div className="col-4">
+                                                    <ul>
+                                                        {
+                                                            item.books.map(book => <li key={book.id}>{book.title}</li>)
+                                                        }
+                                                    </ul>
+                                                </div>
+                                                <div className="col-4">
+                                                    <ul>
+                                                        {
+                                                            item.books.map(book => book.heroes.map(hero => <li key={hero.id}>{hero.name}</li>))
+                                                        }
+                                                    </ul>
                                                 </div>
                                             </div>
                                         )
