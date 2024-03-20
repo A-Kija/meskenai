@@ -156,9 +156,26 @@ app.get('/', (req, res) => {
       res.json(result);
     }
   });
+});
 
-
-
+app.get('/hero/:id', (req, res) => {
+  const sql = `
+  SELECT h.id, h.name, a.name as authorName, a.surname as authorSurname, good, title, book_id, image
+  FROM heroes as h
+  LEFT JOIN books as b 
+  ON h.book_id = b.id
+  LEFT JOIN authors as a
+  ON b.author_id = a.id
+  WHERE h.id = ?
+  `;
+  connection.query(sql, [req.params.id], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    else {
+      res.json(result[0]);
+    }
+  });
 });
 
 
