@@ -178,6 +178,38 @@ app.get('/hero/:id', (req, res) => {
   });
 });
 
+app.get('/heroes-list', (req, res) => {
+  let sql;
+  const inPage = 5;
+  const page = req.query.page || 1;
+  let total = 0;
+  let totalPages = 0;
+
+  sql = 'SELECT COUNT(*) AS total FROM heroes'; 
+  connection.query(sql, (err, countResult) => { 
+    if (err) { 
+      res.status(500).send(err); 
+    } else { 
+      total = countResult[0].total; 
+      totalPages = Math.ceil(total / inPage); 
+    } 
+  });
+
+  sql = `
+  SELECT *
+  FROM heroes
+  LIMIT ?, ?
+  `;
+  connection.query(sql, [(page - 1) * inPage, inPage], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    else {
+      res.json({ result, total, totalPages, page: +page });
+    }
+  });
+});
+
 
 
 
