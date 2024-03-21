@@ -1,7 +1,18 @@
+import { useEffect, useState } from 'react';
 import Nav from '../../Components/Nav';
 import useGet from '../../Hooks/useGet';
 import * as icon from '../../Icons';
 import { SERVER_URL } from '../../Constants/main';
+
+const filterBy = [
+    { filter: 'good', label: 'Good' },
+    { filter: 'bad', label: 'Bad' }
+];
+
+const sortBy = [
+    { sort: 'name_asc', label: 'Name (A-Z)' },
+    { sort: 'name_desc', label: 'Name (Z-A)' }
+];
 
 
 export default function Index() {
@@ -10,6 +21,34 @@ export default function Index() {
 
 
     const { data, loading, setUrl } = useGet('/heroes-list');
+
+    const [filter, setFilter] = useState('');
+    const [sort, setSort] = useState('');
+    
+
+    useEffect(_ => {
+        if (filter && !sort) {
+            setUrl(`/heroes-list?filter=${filter}`);
+        } else if (filter && sort) {
+            setUrl(`/heroes-list?filter=${filter}&sort=${sort}`);
+        } else if (!filter && sort) {
+            setUrl(`/heroes-list?sort=${sort}`);
+        }else {
+            setUrl('/heroes-list');
+        }
+    }, [filter, setUrl]);
+
+    useEffect(_ => {
+        if (sort && !filter) {
+            setUrl(`/heroes-list?sort=${sort}`);
+        } else if (sort && filter) {
+            setUrl(`/heroes-list?filter=${filter}&sort=${sort}`);
+        } else if (!sort && filter) {
+            setUrl(`/heroes-list?filter=${filter}`);
+        }else {
+            setUrl('/heroes-list');
+        }
+    }, [sort, setUrl]);
 
     const go = (e, page) => {
         e.preventDefault();
@@ -22,9 +61,15 @@ export default function Index() {
             page = Math.min(data.totalPages, page);
         }
 
-
-
-        setUrl('/heroes-list?page=' + page);
+        if (filter && !sort) {
+            setUrl('/heroes-list?filter=' + filter + '&page=' + page);
+        } else if (filter && sort) {
+            setUrl('/heroes-list?filter=' + filter + '&sort=' + sort + '&page=' + page);
+        } else if (!filter && sort) {
+            setUrl('/heroes-list?sort=' + sort + '&page=' + page);
+        } else {
+            setUrl('/heroes-list?page=' + page);
+        }
     }
 
     console.log(data);
@@ -63,7 +108,35 @@ export default function Index() {
                     <div className="col-12 mt-4">
                         <div className="card">
                             <div className="card-header">
-                                <h3>List</h3>
+                                <div className="container">
+                                    <div className="row">
+                                        <div className="col-3">
+                                            <h3>List</h3>
+                                        </div>
+                                        <div className="col-3">
+                                            <div className="mb-3">
+                                                <label htmlFor="filter" className="form-label">Filter heroes</label>
+                                                <select className="form-select" id="filter" value={filter} onChange={e => setFilter(e.target.value)}>
+                                                    <option value="">All</option>
+                                                    {
+                                                        filterBy.map(item => <option key={item.filter} value={item.filter}>{item.label}</option>)
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className="col-3">
+                                            <div className="mb-3">
+                                                <label htmlFor="sort" className="form-label">Sort by name</label>
+                                                <select className="form-select" id="sort" value={sort} onChange={e => setSort(e.target.value)}>
+                                                    <option value="">default</option>
+                                                    {
+                                                        sortBy.map(item => <option key={item.sort} value={item.sort}>{item.label}</option>)
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div className="card-body">
                                 <table className="table heroes-table">
@@ -97,7 +170,7 @@ export default function Index() {
                             <nav className="paginator">
                                 <ul className="pagination">
                                     {
-                                        data.page === 1 || <li className="page-item prev"><a className="page-link" onClick={e => go(e, 1)} href="/">first</a></li>
+                                        data.page === 1 || <li className="page-item prev"><a className="page-link" onClick={e => go(e, 1)} href="/">{icon.last}</a></li>
                                     }
                                     {
                                         data.page === 1 || <li className="page-item prev"><a className="page-link" onClick={e => go(e, 'prev')} href="/">{icon.next}</a></li>
@@ -122,7 +195,7 @@ export default function Index() {
                                         data.page === data.totalPages || <li className="page-item next"><a className="page-link" onClick={e => go(e, 'next')} href="/">{icon.next}</a></li>
                                     }
                                     {
-                                        data.page === data.totalPages || <li className="page-item next"><a className="page-link" onClick={e => go(e, data.totalPages)} href="/">last</a></li>
+                                        data.page === data.totalPages || <li className="page-item next"><a className="page-link" onClick={e => go(e, data.totalPages)} href="/">{icon.last}</a></li>
                                     }
 
                                 </ul>
