@@ -180,7 +180,7 @@ app.get('/hero/:id', (req, res) => {
 
 app.get('/heroes-list', (req, res) => {
   let sql;
-  const inPage = 5;
+  const inPage = 1;
   const page = req.query.page || 1;
   let total = 0;
   let totalPages = 0;
