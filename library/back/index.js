@@ -184,6 +184,7 @@ app.get('/heroes-list', (req, res) => {
   const inPage = 5;
   const page = req.query.page || 1;
   let filter = req.query.filter || '';
+  let sort = req.query.sort || '';
   filter = filter === 'good' ? 1 : filter === 'bad' ? 0 : '';
   let total = 0;
   let totalPages = 0;
@@ -211,20 +212,77 @@ app.get('/heroes-list', (req, res) => {
     }
   });
 
-  if (filter === '') {
+  if (filter === '' && sort === '') {
   sql = `
-    SELECT *
-    FROM heroes
+    SELECT h.id, h.name, h.good, h.book_id, h.image, b.url, b.title
+    FROM heroes AS h
+    LEFT JOIN books AS b
+    ON h.book_id = b.id
     LIMIT ?, ?
   `;
   query = [(page - 1) * inPage, inPage];
-  } else {
+  
+
+  } else if (filter !== '' && sort === '') {
     sql = `
     SELECT *
     FROM heroes
     WHERE good = ?
     LIMIT ?, ?
     `;
+    query = [filter, (page - 1) * inPage, inPage];
+
+
+  } else if (filter === '' && sort !== '') {
+    if (sort === 'name_asc') {
+      sql = `
+      SELECT *
+      FROM heroes
+      ORDER BY name
+      LIMIT ?, ?
+      `;
+    } else if (sort === 'name_desc') {
+      sql = `
+      SELECT *
+      FROM heroes
+      ORDER BY name
+      LIMIT ?, ?
+      `;
+    } else {
+      sql = `
+      SELECT *
+      FROM heroes
+      LIMIT ?, ?
+      `;
+    }
+    query = [(page - 1) * inPage, inPage];
+
+
+  } else {
+    if (sort === 'name_asc') {
+      sql = `
+      SELECT *
+      FROM heroes
+      WHERE good = ?
+      ORDER BY name
+      LIMIT ?, ?
+      `;
+    } else if (sort === 'name_desc') {
+      sql = `
+      SELECT *
+      FROM heroes
+      WHERE good = ?
+      ORDER BY name DESC
+      LIMIT ?, ?
+      `;
+    } else {
+      sql = `
+      SELECT *
+      FROM heroes
+      WHERE good = ?
+      LIMIT ?, ?
+      `;
+    }
     query = [filter, (page - 1) * inPage, inPage];
   }
   connection.query(sql, query, (err, result) => {
