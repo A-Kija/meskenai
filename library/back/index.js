@@ -178,6 +178,26 @@ app.get('/hero/:id', (req, res) => {
   });
 });
 
+app.get('/book/:slug', (req, res) => {
+  const sql = `
+  SELECT b.id, title, pages, genre, a.name, surname, author_id, url, h.id as hero_id, h.name as hero, good, image
+  FROM books as b
+  LEFT JOIN authors as a
+  ON b.author_id = a.id
+  LEFT JOIN heroes as h
+  ON b.id = h.book_id
+  WHERE b.url = ?
+  `;
+  connection.query(sql, [req.params.slug], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    else {
+      res.json(result);
+    }
+  });
+});
+
 app.get('/heroes-list', (req, res) => {
   let sql;
   let query;
