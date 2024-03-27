@@ -22,6 +22,8 @@ export default function Index() {
 
     const [rate, setRate] = useState(0);
 
+    const [afterRate, setAfterRate] = useState(null);
+
     const heroes = data => {
         const h = [];
         data.forEach(item => {
@@ -45,6 +47,10 @@ export default function Index() {
         if (rate === 0) return;
         setSendData({ rate: rate });
         setPostUrl('/rating/' + book.id + '/' + localStorage.getItem('userMark'));
+        setAfterRate({
+            rate: +((rating.sum + rate) / (rating.votes + 1)).toFixed(1),
+            votes: rating.votes + 1
+        });
         setRate(0);
     }, [rate, setSendData, setPostUrl, book.id]);
 
@@ -100,18 +106,24 @@ export default function Index() {
                                                 <div className="rating-box">
                                                     <div className="rating">
                                                         <div className="empty-stars"></div>
-                                                        <div className="full-stars" style={{ width: rating.rate === null ? '0' : (rating.rate * 20) + '%' }}></div>
+                                                        <div className="full-stars" style={{
+                                                            width: afterRate !== null ? (afterRate.rate * 20) + '%' : rating.rate === null ? '0' : (rating.rate * 20) + '%'
+                                                        }}></div>
                                                     </div>
                                                     {
-                                                        rating.rate === null &&
+                                                        rating.rate === null && afterRate === null &&
                                                         <span>0/5 (0)</span>
                                                     }
                                                     {
-                                                        rating.rate === null ||
+                                                        rating.rate !== null && afterRate === null &&
                                                         <span>{rating.rate}/5 ({rating.votes})</span>
                                                     }
                                                     {
-                                                        rating.canRate &&
+                                                        afterRate !== null &&
+                                                        <span>{afterRate.rate}/5 ({afterRate.votes})</span>
+                                                    }
+                                                    {
+                                                        rating.canRate && afterRate === null &&
                                                         <select value={rate} onChange={e => setRate(+e.target.value)}>
                                                             <option value="0">Rate this book</option>
                                                             <option value="1">1</option>
@@ -120,6 +132,10 @@ export default function Index() {
                                                             <option value="4">4</option>
                                                             <option value="5">5</option>
                                                         </select>
+                                                    }
+                                                    {
+                                                        afterRate !== null &&
+                                                        <span>Thank you for rating</span>
                                                     }
                                                 </div>
                                             </>

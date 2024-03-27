@@ -338,7 +338,8 @@ app.get('/rating/:slug/:mark', (req, res) => {
         res.json({ 
           canRate: userMark === undefined ? true : false,
           rate,
-          votes 
+          votes,
+          sum 
         });
       }
     });
@@ -367,9 +368,9 @@ app.post('/rating/:id/:mark', (req, res) => {
       const sql = `
       UPDATE books
       SET ratings = ?
-      WHERE url = ?
+      WHERE id = ?
       `;
-      connection.query(sql, [newRatings, req.params.slug], (err) => {
+      connection.query(sql, [newRatings, req.params.id], (err) => {
         if (err) {
           res.status(500).send(err);
         }
@@ -567,8 +568,10 @@ app.post('/books', (req, res) => {
     return;
   }
 
-  const sql = 'INSERT INTO books (title, pages, genre, author_id) VALUES (?, ?, ?, ?)';
-  connection.query(sql, [title, pages, genre, author_id], (err, result) => {
+  const slug = title.toLowerCase().replace(/ /g, '-');
+
+  const sql = 'INSERT INTO books (title, pages, genre, author_id, url) VALUES (?, ?, ?, ?, ?)';
+  connection.query(sql, [title, pages, genre, author_id, slug], (err, result) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -737,8 +740,10 @@ app.put('/books/:id', (req, res) => {
     return;
   }
 
-  const sql = 'UPDATE books SET title = ?, pages = ?, genre = ?, author_id = ? WHERE id = ?';
-  connection.query(sql, [title, pages, genre, author_id, req.params.id], (err) => {
+  const slug = title.toLowerCase().replace(/ /g, '-');
+
+  const sql = 'UPDATE books SET title = ?, pages = ?, genre = ?, author_id = ?, url = ? WHERE id = ?';
+  connection.query(sql, [title, pages, genre, author_id, slug, req.params.id], (err) => {
     if (err) {
       res.status(500).send(err);
     } else {
