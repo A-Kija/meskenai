@@ -118,7 +118,7 @@ app.get('/', (req, res) => {
 
   if (sort === 'name_asc') {
     sql = `
-    SELECT a.id, a.name, a.surname, b.id as book_id, b.title, b.pages, b.genre, h.id as hero_id, h.name as hero, good
+    SELECT a.id, a.name, a.surname, b.id as book_id, b.title, b.pages, b.genre, h.id as hero_id, h.name as hero, good, h.url as heroUrl, b.url as bookUrl
     FROM authors as a
     LEFT JOIN books as b
     on a.id = b.author_id
@@ -128,7 +128,7 @@ app.get('/', (req, res) => {
     `;
   } else if (sort === 'name_desc') {
     sql = `
-    SELECT a.id, a.name, a.surname, b.id as book_id, b.title, b.pages, b.genre, h.id as hero_id, h.name as hero, good
+    SELECT a.id, a.name, a.surname, b.id as book_id, b.title, b.pages, b.genre, h.id as hero_id, h.name as hero, good, h.url as heroUrl, b.url as bookUrl
     FROM authors as a
     LEFT JOIN books as b
     on a.id = b.author_id
@@ -139,7 +139,7 @@ app.get('/', (req, res) => {
   }
   else {
     sql = `
-    SELECT a.id, a.name, a.surname, b.id as book_id, b.title, b.pages, b.genre, h.id as hero_id, h.name as hero, good
+    SELECT a.id, a.name, a.surname, b.id as book_id, b.title, b.pages, b.genre, h.id as hero_id, h.name as hero, good, h.url as heroUrl, b.url as bookUrl
     FROM authors as a
     LEFT JOIN books as b
     on a.id = b.author_id
@@ -158,7 +158,8 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/hero/:id', (req, res) => {
+
+app.get('/hero/:slug', (req, res) => {
   const sql = `
   SELECT h.id, h.name, a.name as authorName, a.surname as authorSurname, good, title, book_id, image
   FROM heroes as h
@@ -166,9 +167,9 @@ app.get('/hero/:id', (req, res) => {
   ON h.book_id = b.id
   LEFT JOIN authors as a
   ON b.author_id = a.id
-  WHERE h.id = ?
+  WHERE h.url = ?
   `;
-  connection.query(sql, [req.params.id], (err, result) => {
+  connection.query(sql, [req.params.slug], (err, result) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -180,7 +181,7 @@ app.get('/hero/:id', (req, res) => {
 
 app.get('/book/:slug', (req, res) => {
   const sql = `
-  SELECT b.id, title, pages, genre, a.name, surname, author_id, url, h.id as hero_id, h.name as hero, good, image
+  SELECT b.id, title, pages, genre, a.name, surname, author_id, b.url AS bookUrl, h.url AS heroUrl, h.id as hero_id, h.name as hero, good, image
   FROM books as b
   LEFT JOIN authors as a
   ON b.author_id = a.id
@@ -532,7 +533,6 @@ app.post('/authors', (req, res) => {
     return;
   }
 
-
   const { name, surname, nickname, born } = req.body;
 
   if (!name || !surname || !born) {
@@ -540,8 +540,10 @@ app.post('/authors', (req, res) => {
     return;
   }
 
-  const sql = 'INSERT INTO authors (name, surname, nickname, born) VALUES (?, ?, ?, ?)';
-  connection.query(sql, [name, surname, nickname, born], (err, result) => {
+  const slug = name.toLowerCase() + '-' + surname.toLowerCase();
+
+  const sql = 'INSERT INTO authors (name, surname, nickname, born, url) VALUES (?, ?, ?, ?, ?)';
+  connection.query(sql, [name, surname, nickname, born, slug], (err, result) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -600,8 +602,10 @@ app.post('/heroes', (req, res) => {
     return;
   }
 
-  const sql = 'INSERT INTO heroes (name, good, book_id, image) VALUES (?, ?, ?, ?)';
-  connection.query(sql, [name, good, book_id, filename !== null ? ('images/' + filename) : null], (err, result) => {
+  const slug = name.toLowerCase().replace(/ /g, '-');
+
+  const sql = 'INSERT INTO heroes (name, good, book_id, image, url) VALUES (?, ?, ?, ?, ?)';
+  connection.query(sql, [name, good, book_id, filename !== null ? ('images/' + filename) : null, slug], (err, result) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -712,9 +716,10 @@ app.put('/authors/:id', (req, res) => {
     return;
   }
 
+  const slug = name.toLowerCase() + '-' + surname.toLowerCase();
 
-  const sql = 'UPDATE authors SET name = ?, surname = ?, nickname = ?, born = ? WHERE id = ?';
-  connection.query(sql, [name, surname, nickname, born, req.params.id], (err) => {
+  const sql = 'UPDATE authors SET name = ?, surname = ?, nickname = ?, born = ?, url = ? WHERE id = ?';
+  connection.query(sql, [name, surname, nickname, born, slug, req.params.id], (err) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -773,14 +778,16 @@ app.put('/heroes/:id', (req, res) => {
     return;
   }
 
+  const slug = name.toLowerCase().replace(/ /g, '-');
+
   let sql;
   let params;
   if (req.body.del || filename !== null) {
-    sql = 'UPDATE heroes SET name = ?, good = ?, book_id = ?, image = ? WHERE id = ?';
-    params = [name, good, book_id, filename !== null ? ('images/' + filename) : null, req.params.id];
+    sql = 'UPDATE heroes SET name = ?, good = ?, book_id = ?, image = ?, url = ? WHERE id = ?';
+    params = [name, good, book_id, filename !== null ? ('images/' + filename) : null, slug, req.params.id];
   } else {
-    sql = 'UPDATE heroes SET name = ?, good = ?, book_id = ? WHERE id = ?';
-    params = [name, good, book_id, req.params.id];
+    sql = 'UPDATE heroes SET name = ?, good = ?, book_id = ?, url = ? WHERE id = ?';
+    params = [name, good, book_id, slug, req.params.id];
   }
 
   connection.query(sql, params, (err) => {
@@ -795,58 +802,6 @@ app.put('/heroes/:id', (req, res) => {
     }
   });
 });
-
-
-
-
-
-
-app.post('/fruits', (req, res) => {
-
-
-
-  const { name, color, form } = req.body;
-  const sql = 'INSERT INTO fruits (name, color, form ) VALUES (?, ?, ?)';
-  connection.query(sql, [name, color, form], (err, result) => {
-    if (err) {
-      res.status(500);
-    } else {
-      res.json({ success: true, id: result.insertId, uuid: req.body.id });
-    }
-  });
-});
-
-app.put('/fruits/:id', (req, res) => {
-
-
-
-  const { name, color, form } = req.body;
-  const sql = 'UPDATE fruits SET name = ?, color = ?, form = ? WHERE id = ?';
-  connection.query(sql, [name, color, form, req.params.id], (err) => {
-    if (err) {
-      res.status(500);
-    } else {
-      res.json({ success: true, id: +req.params.id });
-    }
-  });
-});
-
-
-app.delete('/fruits/:id', (req, res) => {
-
-
-
-  const sql = 'DELETE FROM fruits WHERE id = ?';
-  connection.query(sql, [req.params.id], (err) => {
-    if (err) {
-      res.status(500);
-    } else {
-      res.json({ success: true, id: +req.params.id });
-    }
-  });
-});
-
-
 
 
 
