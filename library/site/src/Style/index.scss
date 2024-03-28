@@ -135,14 +135,7 @@ span.sep {
   font-size: 20px;
   margin-top: 20px;
 
-  a {
-    color: peru;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+  
 }
 
 .heroes-table td {
@@ -227,4 +220,29 @@ nav.paginator {
   &:hover {
     border-bottom: 2px solid peru;
   }
+}
+
+.hero-link {
+  text-decoration: none;
+  font-weight: bold;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+
+  &.hero-1 {
+    color: orange;
+  }
+
+  &.hero-0 {
+    color: skyblue;
+  }
+
+  &.hero-1:hover {
+    border-bottom-color: orange;
+  }
+
+  &.hero-0:hover {
+    border-bottom-color: skyblue;
+  }
+
+
 }

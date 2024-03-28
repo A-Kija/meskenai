@@ -112,13 +112,14 @@ app.use(doAuth);
 
 // FRONT OFFICE //
 
+
 app.get('/', (req, res) => {
   const sort = req.query.sort || '';
   let sql;
 
   if (sort === 'name_asc') {
     sql = `
-    SELECT a.id, a.name, a.surname, b.id as book_id, b.title, b.pages, b.genre, h.id as hero_id, h.name as hero, good, h.url as heroUrl, b.url as bookUrl
+    SELECT a.id, a.name, a.surname, b.id as book_id, b.title, b.pages, b.genre, h.id as hero_id, h.name as hero, good, h.url as heroUrl, b.url as bookUrl, b.rate
     FROM authors as a
     LEFT JOIN books as b
     on a.id = b.author_id
@@ -128,7 +129,7 @@ app.get('/', (req, res) => {
     `;
   } else if (sort === 'name_desc') {
     sql = `
-    SELECT a.id, a.name, a.surname, b.id as book_id, b.title, b.pages, b.genre, h.id as hero_id, h.name as hero, good, h.url as heroUrl, b.url as bookUrl
+    SELECT a.id, a.name, a.surname, b.id as book_id, b.title, b.pages, b.genre, h.id as hero_id, h.name as hero, good, h.url as heroUrl, b.url as bookUrl, b.rate
     FROM authors as a
     LEFT JOIN books as b
     on a.id = b.author_id
@@ -139,7 +140,7 @@ app.get('/', (req, res) => {
   }
   else {
     sql = `
-    SELECT a.id, a.name, a.surname, b.id as book_id, b.title, b.pages, b.genre, h.id as hero_id, h.name as hero, good, h.url as heroUrl, b.url as bookUrl
+    SELECT a.id, a.name, a.surname, b.id as book_id, b.title, b.pages, b.genre, h.id as hero_id, h.name as hero, good, h.url as heroUrl, b.url as bookUrl, b.rate
     FROM authors as a
     LEFT JOIN books as b
     on a.id = b.author_id
@@ -159,9 +160,10 @@ app.get('/', (req, res) => {
 });
 
 
+
 app.get('/hero/:slug', (req, res) => {
   const sql = `
-  SELECT h.id, h.name, a.name as authorName, a.surname as authorSurname, good, title, book_id, image
+  SELECT h.id, h.name, a.name as authorName, a.surname as authorSurname, good, title, book_id, image, b.url
   FROM heroes as h
   LEFT JOIN books as b 
   ON h.book_id = b.id
@@ -366,12 +368,17 @@ app.post('/rating/:id/:mark', (req, res) => {
       const ratings = JSON.parse(result[0].ratings);
       ratings.push({ mark, rate });
       const newRatings = JSON.stringify(ratings);
+
+      const votes = ratings.length;
+      const sum = ratings.reduce((acc, item) => acc + +item.rate, 0);
+      const newRate = +(sum / votes).toFixed(1);
+
       const sql = `
       UPDATE books
-      SET ratings = ?
+      SET ratings = ?, rate = ?
       WHERE id = ?
       `;
-      connection.query(sql, [newRatings, req.params.id], (err) => {
+      connection.query(sql, [newRatings, newRate, req.params.id], (err) => {
         if (err) {
           res.status(500).send(err);
         }

@@ -95,7 +95,7 @@ export default function Index() {
                                                     <div className="col-4 heroes-list" key={hero.id}>
                                                         {hero.image === null && <img src={SERVER_URL + '/images/no.jpg'} alt={hero.name} style={{ maxWidth: '300px' }} className="img-thumbnail" />}
                                                         {hero.image && <img src={SERVER_URL + '/' + hero.image} alt={hero.name} style={{ maxWidth: '300px' }} className="img-thumbnail" />}
-                                                        <a href={'#hero/' + hero.url} className="nice-link">{hero.name}</a>
+                                                        <div><a href={'#hero/' + hero.url} className="nice-link">{hero.name}</a></div>
                                                         <span className={'icon ' + (hero.good ? 'good' : 'bad')}>{hero.good ? icon.good : icon.bad}</span>
                                                     </div>
                                                 ))}
